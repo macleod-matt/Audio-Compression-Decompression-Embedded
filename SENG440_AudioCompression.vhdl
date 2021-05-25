@@ -35,6 +35,7 @@ begin
         if(input_local > 800) then 
             chord <= "111";
             step <= resize((shift_right(signed(input_local), 8)), step ' length );
+            output_local <= resize("1100000" OR (shift_right(signed(input_local), 8)), output_local ' length );
         elsif (input_local > 400) then 
            chord <= "110";
             step <= resize((shift_right(signed(input_local), 7)), step ' length );
