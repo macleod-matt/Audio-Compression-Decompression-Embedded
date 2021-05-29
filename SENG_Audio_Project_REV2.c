@@ -177,6 +177,15 @@ int Test(int sample)
 
 int main()
 {
+    start = clock();
+
+    Test(553);
+
+    stop = clock();
+    printf("COMPLETE\n\n");
+    float Duration = (double) (stop - start) /CLOCKS_PER_SEC;
+
+    printf("Audio Compression Duration:\t\t%fs sec\n", Duration);
     
     //Test(553);
     
@@ -192,7 +201,7 @@ int main()
     //Compressed: 166 | 10100110
     //Decompressed: 8216 | 10000000011000
 
-    Test(-181);
+    //Test(-181);
     //Expected Results
     //Input: -181 | 11111111111111111111111101001011 <- *note that the decimal to bin function only works for positive values
     //Compressed: 38 | 100110
