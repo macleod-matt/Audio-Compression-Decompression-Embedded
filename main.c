@@ -10,17 +10,21 @@
 int main(int argc, char **argv){ 
 
     char *inFileName;
-    char *outFileName;
+    char *compressedFileName;
+    char *decompressedFileName;
 
     inFileName = (char*) malloc(sizeof(char) * 1024);
-    outFileName = (char*) malloc(sizeof(char) * 1024);
+    compressedFileName = (char*) malloc(sizeof(char) * 1024);
+    decompressedFileName = (char*) malloc(sizeof(char) * 1024);
+
     char cwd[1024];
 
 
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
 
         strcpy(inFileName, cwd);
-        strcpy(outFileName, cwd);
+        strcpy(compressedFileName, cwd);
+        strcpy(decompressedFileName, cwd);
         // get inFileName from command line
 
         if (argc < 2) {
@@ -33,12 +37,13 @@ int main(int argc, char **argv){
         
         strcat(inFileName, "/");
         strcat(inFileName, argv[1]);
-        strcat(outFileName, "/compressed.wav");
+        strcat(compressedFileName, "/compressed.wav");
+        strcat(decompressedFileName, "/decompressed.wav");
 
-        printf("\n"); 
         
-        encode_wave_file(inFileName,outFileName, COMPRESS);
-
+        
+        encode_wave_file(inFileName,compressedFileName, COMPRESS);
+        encode_wave_file(compressedFileName,decompressedFileName, DECOMPRESS);
 
 
         }
