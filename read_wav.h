@@ -56,7 +56,7 @@ typedef struct wave_file
 
 // functions 
 
-uint32_t encode_wave_file(char* inFileName, char* outFileName, bool encodeType); 
+void encode_wave_file(char* inFileName, char* outFileName, bool encodeType); 
 
 
 #endif 
