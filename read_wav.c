@@ -30,7 +30,7 @@ uint8_t file_size = 0;
 
 
 
-void encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
+int encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
 
     wave_header_t wav_header;
 
@@ -225,6 +225,9 @@ void encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
     free(output_file_name);
     free(inputfile_data_buffer);
     free(output_file_data_buffer);
+
+
+    return 0; 
 }
 
 

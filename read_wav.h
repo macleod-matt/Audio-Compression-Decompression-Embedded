@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include "mulawAPI.h"
 
 // Macro to convert bytes to uint16 
 
-void encode_wave_file(char* inFileName, char* outFileName, bool encodeType); 
 
 
 #define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 8
@@ -49,15 +49,17 @@ typedef struct wave_header
 } wave_header_t;
 
 
-// wave file pointer 
-typedef struct wave_file
-{
-    wave_header_t header;
-    uint32_t *data;
-}wave_file_t; 
+// // wave file pointer 
+// typedef struct wave_file
+// {
+//     wave_header_t header;
+//     uint32_t *data;
+// }wave_file_t; 
 
 
 // functions 
+int encode_wave_file(char* inFileName, char* outFileName, bool encodeType);
+
 
 
 

@@ -1,4 +1,3 @@
-
 #include "read_wav.h"
 #include "mulawAPI.h"
 #include <stdint.h> 
