@@ -29,7 +29,7 @@ int main()
 	int i=0;
 	int a;
 
-	file_ptr = fopen("/Users/Matt/Desktop/SENG 440/Audio-Compression-Decompression/audio_test.m4a","rb");
+	file_ptr = fopen("audio_test.m4a","rb");
 
 
 	if (file_ptr !=NULL)
@@ -40,9 +40,9 @@ int main()
 		for (i=0;!feof(file_ptr);i++)
 			{
 	
-				fread(&data, 1, 1, file_ptr);
-               // printf("%ld	\n", decimalToBinary((int)data));
-                fprintf(out_file, "%ld\n",decimalToBinary((int)data));
+				fread(&data, 1, 2, file_ptr);
+                printf("%ld	\n", decimalToBinary((int)data));
+               // fprintf(out_file, "%ld\n",decimalToBinary((int)data));
 				//would have funtion here passing the 8 bits to arm assembler code, hence the necessatity for 8 btis only!
 			}
 		fclose(file_ptr);
