@@ -21,7 +21,7 @@
 
 
 typedef struct wave_header
-{   nan
+{   
     // riff header -------
     unsigned char  riff[4]; // 'R I F F'
     uint32_t size[4];

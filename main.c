@@ -1,9 +1,5 @@
 #include "mulawAPI.h"
 #include "read_wav.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 
 
@@ -37,10 +33,12 @@ int main(int argc, char **argv){
         strcat(outFileName, "/compressed.wav");
 
         printf("\n"); 
-
-
-    }
+        
         encode_wave_file(inFileName,outFileName, COMPRESS);
+
+
+
+        }
 
 
         return 0; 
