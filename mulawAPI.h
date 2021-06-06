@@ -9,7 +9,7 @@
 
 
 //Chage to 1 for Debugging mode and 0 otherwise
-#define DEBUG 1
+#define DEBUG 0
 #define debug_print(fmt, ...)                    \
     do                                           \
     {                                            \
