@@ -1,10 +1,9 @@
 
 #ifndef MULAWAPI_H
 #define MULAWAPI_H
-#include <unistd.h>
+
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include "read_wav.h"
 // macros
 

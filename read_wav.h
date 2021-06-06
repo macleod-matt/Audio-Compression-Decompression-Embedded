@@ -1,10 +1,10 @@
 #ifndef READ_WAV_H
 #define READ_WAV_H
 
-#include <unistd.h>
+#include <stdint.h> 
+#include <stdbool.h> 
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <time.h>
 
 // Macro to convert bytes to uint16 
@@ -21,7 +21,7 @@
 
 
 typedef struct wave_header
-{   
+{   nan
     // riff header -------
     unsigned char  riff[4]; // 'R I F F'
     uint32_t size[4];

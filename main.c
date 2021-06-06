@@ -1,13 +1,17 @@
 #include "mulawAPI.h"
 #include "read_wav.h"
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 
-
-char *inFileName;
-char *outFileName;
 
 
 int main(int argc, char **argv){ 
+
+    char *inFileName;
+    char *outFileName;
 
     inFileName = (char*) malloc(sizeof(char) * 1024);
     outFileName = (char*) malloc(sizeof(char) * 1024);
@@ -34,9 +38,10 @@ int main(int argc, char **argv){
 
         printf("\n"); 
 
-        encode_wave_file(inFileName,outFileName, COMPRESS);
 
     }
+        encode_wave_file(inFileName,outFileName, COMPRESS);
+
 
         return 0; 
     }

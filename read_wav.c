@@ -3,10 +3,6 @@
 
 
 */  
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "read_wav.h"
 #include "mulawAPI.h"
 
@@ -16,25 +12,25 @@ uint8_t file_size = 0;
 
 
 
-unsigned int  char_to_int(unsigned char *arr, int len){ 
+// unsigned int  char_to_int(unsigned char *arr, int len){ 
 
-   unsigned int num = 0;
+//    unsigned int num = 0;
 
-    for (int i =0; i < len;  i ++){ 
-        printf("%d, %d", arr[i], len); 
-        printf("\n"); 
-        num |= (arr[i] << (8*i)); 
-
-
-    }
-
-    return num; 
-
-} 
+//     for (int i =0; i < len;  i ++){ 
+//         printf("%d, %d", arr[i], len); 
+//         printf("\n"); 
+//         num |= (arr[i] << (8*i)); 
 
 
+//     }
 
-uint32_t encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
+//     return num; 
+
+// } 
+
+
+
+void encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
 
     wave_header_t wav_header;
 
@@ -229,7 +225,6 @@ uint32_t encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
     free(output_file_name);
     free(inputfile_data_buffer);
     free(output_file_data_buffer);
-    return 0
 }
 
 
