@@ -9,6 +9,9 @@
 
 // Macro to convert bytes to uint16 
 
+void encode_wave_file(char* inFileName, char* outFileName, bool encodeType); 
+
+
 #define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 8
 
 #define BITS_PER_SAMPLE (8)
@@ -56,7 +59,6 @@ typedef struct wave_file
 
 // functions 
 
-void encode_wave_file(char* inFileName, char* outFileName, bool encodeType); 
 
 
 #endif 

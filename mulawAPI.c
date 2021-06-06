@@ -1,7 +1,11 @@
-#include <stdio.h>
+
 #include "read_wav.h"
 #include "mulawAPI.h"
-
+#include <stdint.h> 
+#include <stdbool.h> 
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 //Convers decimal to bin
 void convertToBinary(unsigned int n)
 {
