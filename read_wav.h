@@ -1,6 +1,7 @@
 #ifndef READ_WAV_H
 #define READ_WAV_H
 
+
 #include <stdint.h> 
 #include <stdbool.h> 
 #include <stdio.h>
@@ -42,8 +43,8 @@ typedef struct wave_header
 
     // --- sub chink 2 (data) ------ 
     unsigned char  subChunk2ID[4];//'D A T A'
-    uint32_t   subChunk2Size;/* data size */
-    uint32_t data; 
+    unsigned char   subChunk2Size[4];/* data size */
+    unsigned char data[4]; 
 
 
 } wave_header_t;
@@ -56,10 +57,8 @@ typedef struct wave_header
 //     uint32_t *data;
 // }wave_file_t; 
 
-
-// functions 
+// functions
 int encode_wave_file(char* inFileName, char* outFileName, bool encodeType);
-
 
 
 

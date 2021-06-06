@@ -3,8 +3,14 @@
 
 
 */  
-#include "read_wav.h"
+
+#include <stdint.h> 
+#include <stdbool.h> 
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 #include "mulawAPI.h"
+#include "read_wav.h"
 
 
 FILE *inFilePtr, *outFilePtr; 
@@ -166,7 +172,7 @@ int encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
     // determining remaining data size (Subtract 36 to remove allocated bytes from above sections)
 
     // Data size - calculate the size of the remaining input_data
-    fread(wav_header.subChunk2Size, sizeof(wav_header_struct.subChunk2Size), 1, inFilePtr);
+    fread(wav_header.subChunk2Size, sizeof(wav_header.subChunk2Size), 1, inFilePtr);
     int data_header = new_overall_size + 8 - 44;
     byte_buffer_4[0] = (data_header >> 24) & 0xFF;
     byte_buffer_4[1] = (data_header >> 16) & 0xFF;
@@ -195,10 +201,10 @@ int encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
         
         if (encodeType == COMPRESS){ 
         
-            codeword1 = codeword_compression(input_data1);
-            codeword2 = codeword_compression(input_data2);
-            codeword3 = codeword_compression(input_data3);
-            codeword4 = codeword_compression(input_data4);
+            codeword1 = codeword_compression(input_data1,signum(input_data1));
+            codeword2 = codeword_compression(input_data2,signum(input_data2));
+            codeword3 = codeword_compression(input_data3,signum(input_data3));
+            codeword4 = codeword_compression(input_data4,signum(input_data4));
         
         } 
         if (encodeType == DECOMPRESS){ 
@@ -217,12 +223,12 @@ int encode_wave_file(char* inFileName, char* outFileName, bool encodeType){
         output_file_data_buffer[(i / 2) + 3] = codeword4;
     }
     
-    fwrite(output_file_data_buffer, (file_size / 2), 1, output_file);
+    fwrite(output_file_data_buffer, (file_size / 2), 1, outFilePtr);
 
-    fclose(input_file);
-    fclose(output_file);
-    free(input_file_name);
-    free(output_file_name);
+    fclose(inFilePtr);
+    fclose(outFilePtr);
+    free(inFileName);
+    free(outFileName);
     free(inputfile_data_buffer);
     free(output_file_data_buffer);
 
