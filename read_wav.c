@@ -84,7 +84,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     // Wave (Audio Format) :  1=PCM; 6=ALAW; 7=MuLaw
     fread(wav_header.audioFormat, sizeof(wav_header.audioFormat), 1, input_file);
-    byte_buffer_2[0] = 6;
+    byte_buffer_2[0] = 7;
     byte_buffer_2[1] = '\0';
     fwrite(&byte_buffer_2[0], 1, 1, output_file);
     fwrite(&byte_buffer_2[1], 1, 1, output_file);
