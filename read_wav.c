@@ -29,10 +29,9 @@
 
 // } 
 
-int8_t a_law_encode(int16_t sample);
 
 
-int encode_format_file(char* input_file_name, char* output_file_name, bool encodeType){
+int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeType){
 
     FILE *input_file, *output_file;
     // struct wav_header wav_header;
