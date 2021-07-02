@@ -6,11 +6,24 @@
 #include <string.h>
 #include <time.h>
 //Convers decimal to bin
-void convertToBinary(unsigned int n)
+void decToBinary(int n)
 {
-    if (n / 2 != 0) {
-        convertToBinary(n / 2);
+    // array to store binary number
+    int binaryVal[32];
+ 
+    // counter for binary array
+    int i = 0;
+    while (n > 0) {
+ 
+        // storing remainder in binary array
+        binaryVal[i] = n % 2;
+        n = n / 2;
+        i++;
     }
+ 
+    // printing binary array in reverse order
+    for (int j = i - 1; j >= 0; j--)
+        printf("%d", binaryVal[j]);
 }
 
 int signum(int sample)
@@ -41,15 +54,23 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
 {
     int chord, step;
     int codeword_tmp;
-
+    
+    sign = !(sign || sign);     //Flip Sign
+    
     debug_print("\n<============== Checking Compression operation ==============>");
 
     debug_print("\nSample Megnatude: %d | ", sample_magnitude);
-    if(DEBUG) convertToBinary(sample_magnitude);
+    if(DEBUG) decToBinary(sample_magnitude);
     debug_print("\nSample Sign: %d | ", sign);
-    if(DEBUG) convertToBinary(sign);
+    if(DEBUG) decToBinary(sign);
     debug_print("\n");
-
+    
+    if(sample_magnitude > 16383)    //check if input is within upper bound
+    {
+        printf("\n!!!!! INPUT IS TOO LARGE !!!!!\n");
+        return 0;
+    }
+    
     if (sample_magnitude & (1 << 12))
     {
         chord = 0x7;
@@ -84,7 +105,7 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
         convertToBinary(codeword_tmp);
-        return ((int)codeword_tmp);
+        return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 8))
     {
@@ -122,6 +143,9 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
+    
+    debug_print("COULD NOT MEET IF STATMENT CONDITION");
+    return 0;   //Error
 }
 
 int codeword_decompression(int codeWord)
@@ -130,28 +154,29 @@ int codeword_decompression(int codeWord)
 
     if(DEBUG)
     {
-        int Pos_Neg_Shift = (codeWord << 6);
-        int Pos_Neg_Mask = Pos_Neg_Shift & 8192;        //good
-        int shift_val = ((codeWord >> 4) & 7);
-        int Word_Mask = (codeWord & 0xF);
-        int Word_Shift =  ((codeWord & 0xF) << ((codeWord >> 4) & 7));
-        int word1 = (codeWord << 6) & 8192 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 7));
+        int Pos_Neg_Shift = (codeWord << 6);    //get sign
+        int Pos_Neg_Mask = !(Pos_Neg_Shift & 8192) || (Pos_Neg_Shift & 8192);   //Flip sign back
+        int shift_val = ((codeWord >> 4) & 7);  //Get Chord
+        int Word_Mask = (codeWord & 0xF);   //Get Step
+        int Word_Shift =  ((codeWord & 0xF) << ((codeWord >> 4) & 7));  //Get shifted Step
+        int FinalDecompressedWord = (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));
 
-        debug_print("\n Shift to 14 bit: %d | ", Pos_Neg_Shift);
-        convertToBinary(Pos_Neg_Shift);
+
+       debug_print("\n Shift to 14 bit: %d | ", Pos_Neg_Shift);
+        decToBinary(Pos_Neg_Shift);
         debug_print("\n Sign: %d | ", Pos_Neg_Mask);
-        convertToBinary(Pos_Neg_Mask);
+        decToBinary(Pos_Neg_Mask);
         debug_print("\n Step: %d | ", Word_Mask);
-        convertToBinary(Word_Mask);
+        decToBinary(Word_Mask);
         debug_print("\n Chord: %d | ", shift_val);
-        convertToBinary(shift_val);
+        decToBinary(shift_val);
         debug_print("\n Step_Decompressed: %d | ", Word_Shift);
-        convertToBinary(Word_Shift);
-        debug_print("\n Word_Decompressed: %d | ", word1);
-        convertToBinary(word1);
+        decToBinary(Word_Shift);
+        debug_print("\n Word_Decompressed: %d | ", FinalDecompressedWord);
+        decToBinary(FinalDecompressedWord);
     }
 
-   return ((codeWord << 6) & 0x2000 ) ^ 0x2000   ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7));   //Decompressed Word
+   return (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));   //Decompressed Word
 }
 
 int Test(int sample)
