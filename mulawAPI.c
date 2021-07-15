@@ -50,101 +50,98 @@ int magnitude(int sample)
     return (sample);
 }
 
-int codeword_compression(unsigned int sample_magnitude, int sign)
+int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
 {
-    int chord, step;
-    int codeword_tmp;
-    
-    sign = !(sign || sign);     //Flip Sign
-    
-    debug_print("\n<============== Checking Compression operation ==============>");
+    int register chord, step;
+    int register codeword_tmp;
 
-    debug_print("\nSample Megnatude: %d | ", sample_magnitude);
-    if(DEBUG) decToBinary(sample_magnitude);
-    debug_print("\nSample Sign: %d | ", sign);
-    if(DEBUG) decToBinary(sign);
-    debug_print("\n");
-    
-    if(sample_magnitude > 16383)    //check if input is within upper bound
+    sign = !(sign || sign);
+
+    if((DEBUG) && (sample_magnitude > 16383))
     {
         printf("\n!!!!! INPUT IS TOO LARGE !!!!!\n");
-        return 0;
     }
-    
-    if (sample_magnitude & (1 << 12))
+
+    int register Number_Of_Bits = 0;
+
+    while(sample_magnitude)
+    {   
+        Number_Of_Bits++;
+        sample_magnitude = sample_magnitude >> 1;
+    }
+    debug_print("\Number Of Bits: %d Sample: %d\n\n", Number_Of_Bits, sample_magnitude);
+
+    switch (Number_Of_Bits)
     {
+    case (14):
         chord = 0x7;
         step = (sample_magnitude >> 8) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 11))
-    {
+        break;
+    case (13):
         chord = 0x6;
         step = (sample_magnitude >> 7) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 10))
-    {
+        break;
+    case (11):
         chord = 0x5;
         step = (sample_magnitude >> 6) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 9))
-    {
+        break;
+    case (10):
         chord = 0x4;
         step = (sample_magnitude >> 5) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 8))
-    {
+        break;
+    case (9):
         chord = 0x3;
         step = (sample_magnitude >> 4) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 7))
-    {
+        break;
+    case (8):
         chord = 0x2;
         step = (sample_magnitude >> 3) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 6))
-    {
+        break;
+    case (7):
         chord = 0x1;
         step = (sample_magnitude >> 2) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 5))
-    {
+        break;
+    case (6):
         chord = 0x0;
         step = (sample_magnitude >> 1) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
+
         return (codeword_tmp);
+        break;
+
+    default:
+        debug_print("\n\nNo case was found!\n\n");
+        break;
     }
-    
-    debug_print("COULD NOT MEET IF STATMENT CONDITION");
     return 0;   //Error
 }
 
