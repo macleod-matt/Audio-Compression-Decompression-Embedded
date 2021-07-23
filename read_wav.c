@@ -3,7 +3,7 @@
 
 
 */  
-
+#include <stdlib.h>
 #include <stdint.h> 
 #include <stdbool.h> 
 #include <stdio.h>
@@ -171,10 +171,10 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     fclose(input_file);
     fclose(output_file);
-    free(input_file_name);
-    free(output_file_name);
-    free(inputfile_data_buffer);
-    free(output_file_data_buffer);
+    //free(input_file_name);
+    //free(output_file_name);
+    //free(inputfile_data_buffer);
+    //free(output_file_data_buffer);
     return 0;
 }
 
