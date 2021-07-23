@@ -6,6 +6,7 @@
 #include <string.h>
 #include <time.h>
 //Convers decimal to bin
+
 void decToBinary(int n)
 {
     // array to store binary number
@@ -20,10 +21,12 @@ void decToBinary(int n)
         n = n / 2;
         i++;
     }
- 
-    // printing binary array in reverse order
-    for (int j = i - 1; j >= 0; j--)
-        printf("%d", binaryVal[j]);
+	int j; 
+	for(j = i -1 ; j >=0; j++){ 
+		printf("%d", binaryVal[i]); 
+	} 
+
+
 }
 
 int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
@@ -36,7 +39,7 @@ int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
     if((DEBUG) && (sample_magnitude > 16383))
     {
         printf("Input is too large");
-        printf("\n")
+        printf("\n"); 
     }
 
     int register Number_Of_Bits = 0;
@@ -160,11 +163,11 @@ int Test(int sample)
 
     printf("\n<Testing..");
     printf("\nInput: %d | ", sample);
-    convertToBinary(sample);
+    decToBinary(sample);
     printf("\nCompressed: %d | ", Compressed_Word);
-    convertToBinary(Compressed_Word);
+    decToBinary(Compressed_Word);
     printf("\nDecompressed: %d | ", Decompressed_Word);
-    convertToBinary(Decompressed_Word);
+    decToBinary(Decompressed_Word);
 
     return 0;
 }
