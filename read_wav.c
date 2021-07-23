@@ -41,7 +41,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
                                 | (wav_header.overall_size[3] << 24);
     unsigned int new_overall_size = overall_size + 8 - 44;
     
-    new_overall_size = new_overall_size / 2;
+    new_overall_size = new_overall_size >> 1 ;
     new_overall_size = new_overall_size + 44 - 8;
     byte_buffer_4[0] = (new_overall_size >> 24) & 0xFF;
     byte_buffer_4[1] = (new_overall_size >> 16) & 0xFF;
@@ -131,7 +131,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
     overall_size -= 36;
 
     inputfile_data_buffer = malloc(overall_size * sizeof(char));
-    output_file_data_buffer = malloc((overall_size / 2) * sizeof(char));
+    output_file_data_buffer = malloc((overall_size >> 1) * sizeof(char));
 
     fread(inputfile_data_buffer, overall_size, 1, input_file);
 
@@ -161,10 +161,10 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
         } 
 
 
-        output_file_data_buffer[i / 2] = codeword1;
-        output_file_data_buffer[(i / 2) + 1] = codeword2;
-        output_file_data_buffer[(i / 2) + 2] = codeword3;
-        output_file_data_buffer[(i / 2) + 3] = codeword4;
+        output_file_data_buffer[i >> 1] = codeword1;
+        output_file_data_buffer[(i >> 1) + 1] = codeword2;
+        output_file_data_buffer[(i >> 1) + 2] = codeword3;
+        output_file_data_buffer[(i >> 1) + 3] = codeword4;
     }
 
     fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
