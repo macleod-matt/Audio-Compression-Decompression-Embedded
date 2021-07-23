@@ -8,19 +8,11 @@
 #include <string.h>
 #include <time.h>
 
-// Macro to convert bytes to uint16 
-
 
 #define BITS_PER_SAMPLE 8
-
-#define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 8
-
-
-
-// #define BITS_PER_SAMPLE (8)
-
 #define COMPRESS (1)
 #define DECOMPRESS (0)
+#define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 8
 
 
 // wave file header struct
@@ -47,13 +39,6 @@ typedef struct wav_header {
 } wave_header_t;
 
 
-
-// // wave file pointer 
-// typedef struct wave_file
-// {
-//     wave_header_t header;
-//     uint32_t *data;
-// }wave_file_t; 
 
 // functions
 int encode_wave_file(char* inFileName, char* outFileName, bool encodeType);

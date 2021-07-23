@@ -26,30 +26,6 @@ void decToBinary(int n)
         printf("%d", binaryVal[j]);
 }
 
-int signum(int sample)
-{
-    if (sample < 0)
-    {
-        debug_print("\nNegative\n");
-        return (0); /* sign is ’0’ for negative samples */
-    }
-    else
-    {
-        debug_print("\nPositive\n");
-        return (1); /* sign is ’1’ for positive samples */
-    }
-}
-
-int magnitude(int sample)
-{   
-    if (sample < 0)
-    {
-        sample = -sample;
-    }
-    debug_print("Magnatude: %d", sample);
-    return (sample);
-}
-
 int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
 {
     int register chord, step;
@@ -59,7 +35,8 @@ int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
 
     if((DEBUG) && (sample_magnitude > 16383))
     {
-        printf("\n!!!!! INPUT IS TOO LARGE !!!!!\n");
+        printf("Input is too large");
+        printf("\n")
     }
 
     int register Number_Of_Bits = 0;
@@ -69,7 +46,7 @@ int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
         Number_Of_Bits++;
         sample_magnitude = sample_magnitude >> 1;
     }
-    debug_print("\Number Of Bits: %d Sample: %d\n\n", Number_Of_Bits, sample_magnitude);
+    debug_print("\nNumber Of Bits: %d Sample: %d\n\n", Number_Of_Bits, sample_magnitude);
 
     switch (Number_Of_Bits)
     {
@@ -147,7 +124,7 @@ int codeword_compression(unsigned int sample_magnitude, unsigned int sign)
 
 int codeword_decompression(int codeWord)
 {
-    debug_print("\n<============== Checking Decompression operation ==============>");
+    debug_print("\nDecomp Check");
 
     if(DEBUG)
     {
@@ -159,7 +136,7 @@ int codeword_decompression(int codeWord)
         int FinalDecompressedWord = (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));
 
 
-       debug_print("\n Shift to 14 bit: %d | ", Pos_Neg_Shift);
+        debug_print("\n Shift to 14 bit: %d | ", Pos_Neg_Shift);
         decToBinary(Pos_Neg_Shift);
         debug_print("\n Sign: %d | ", Pos_Neg_Mask);
         decToBinary(Pos_Neg_Mask);
@@ -181,7 +158,7 @@ int Test(int sample)
     int Compressed_Word = codeword_compression(magnitude(sample), signum(sample));
     int Decompressed_Word = codeword_decompression(Compressed_Word);
 
-    printf("\n<========================= TESTING ============================>");
+    printf("\n<Testing..");
     printf("\nInput: %d | ", sample);
     convertToBinary(sample);
     printf("\nCompressed: %d | ", Compressed_Word);

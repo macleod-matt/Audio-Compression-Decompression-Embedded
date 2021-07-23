@@ -9,20 +9,25 @@
 
 
 //Chage to 1 for Debugging mode and 0 otherwise
-#define DEBUG 0
-#define debug_print(fmt, ...)                    \
-    do                                           \
-    {                                            \
-        if (DEBUG)                               \
-            fprintf(stderr, fmt, ##__VA_ARGS__); \
-    }   while (0)
+#define DEBUG (0)
+
+#if DEBUG == 1
+    #define debug_print printf
+#else 
+    #define debug_print
+#endif 
 
 
+#define magnitude(sample) ((sample < 0) ? -sample : sample) 
+
+#define signum(num) ((num > 0)) 
 
 
 // Functions 
 
-int signum(int sample); 
+// int signum(int sample); 
+
+ 
 
 int codeword_compression(unsigned int sample_magnitude, int sign); 
 
