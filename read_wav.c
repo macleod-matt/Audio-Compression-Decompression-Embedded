@@ -167,7 +167,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
         output_file_data_buffer[(i >> 1) + 3] = codeword4;
     }
 
-    fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
+    fwrite(output_file_data_buffer, (overall_size >> 1), 1, output_file);
 
     fclose(input_file);
     fclose(output_file);
