@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <time.h> 
 
-time_t start, stop; 
+time_t start, stop, start2,stop2; 
 double compression_time, decompression_time; 
 
 
@@ -51,20 +51,20 @@ int main(int argc, char **argv){
 
         stop = clock(); 
         
-        compression_time = (double) (stop - start) / CLOCKS_PER_SEC;
+        compression_time = (double) ((double) stop - (double) start) / CLOCKS_PER_SEC;
 
-        start = clock(); 
+        start2 = clock(); 
         
         encode_wave_file(compressedFileName,decompressedFileName, DECOMPRESS);
         
-        stop = clock(); 
+        stop2 = clock(); 
 
-        decompression_time = (double) (stop - start) / CLOCKS_PER_SEC;
+        decompression_time = (double) ((double)stop - (double)start) / CLOCKS_PER_SEC;
 
 
         printf("Complete\n"); 
-        printf("Audio Compression Time Using Mu Law:\t\t%fs sec\n", compression_time);
-        printf("Audio Decompression Time:\t%fs sec\n\n", decompression_time);
+        printf("Audio Compression Time Using Mu Law:%lf  Seconds\n",compression_time );
+        printf("Audio Decompression Time: %lf  Seconds \n", decompression_time);
     
 
         }

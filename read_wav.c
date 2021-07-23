@@ -99,7 +99,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     // Wave (Block Align)  = (NumChannels * BitsPerSample) / 8
     fread(wav_header.blockAlign, sizeof(wav_header.blockAlign), 1, input_file);
-    unsigned int blockAlign = (numChannels * BITS_PER_SAMPLE) / 8;
+    unsigned int blockAlign = (numChannels * BITS_PER_SAMPLE) >>  3;
     byte_buffer_2[0] = (blockAlign >> 8) & 0xFF;
     byte_buffer_2[1] = blockAlign & 0xFF;
     fwrite(&byte_buffer_2[1], 1, 1, output_file);
