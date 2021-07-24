@@ -33,7 +33,7 @@ int main(int argc, char **argv){
 
         if (argc < 2) {
 
-        printf("No wave file specifiedn");
+       		printf("No wave file specified");
 
         return 0;
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv){
         
         start = clock(); 
 
-        encode_wave_file(inFileName,compressedFileName, COMPRESS);
+        encode_wave_file(inFileName,compressedFileName, COMPRESS) ;  
 
         stop = clock(); 
         

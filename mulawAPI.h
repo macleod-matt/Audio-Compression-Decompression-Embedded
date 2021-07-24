@@ -26,7 +26,7 @@
 // Functions 
  
 
-int codeword_compression(unsigned int sample_magnitude, unsigned int sign); 
+int codeword_compression(unsigned int sample_magnitude, int sign); 
 
 int codeword_decompression(int codeWord); 
 
