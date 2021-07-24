@@ -144,6 +144,8 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
         
         
        if (encodeType & COMPRESS){ 
+
+            printf("Compresssing"); 
         
             codeword1 = codeword_compression(input_data1,signum(input_data1));
             codeword2 = codeword_compression(input_data2,signum(input_data2));
@@ -151,7 +153,9 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword4 = codeword_compression(input_data4,signum(input_data4));
         
         } 
-        if (encodeType & DECOMPRESS){ 
+        else if (encodeType & DECOMPRESS){ 
+
+            printf("Decompressing"); 
         
             codeword1 = codeword_decompression(input_data1);
             codeword2 = codeword_decompression(input_data2);
