@@ -176,7 +176,7 @@ int codeword_decompression(int codeWord)
         decToBinary(FinalDecompressedWord);
     }
 
-   return (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));   //Decompressed Word
+      return (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));  //Decompressed Word
 }
 
 int Test(int sample)
