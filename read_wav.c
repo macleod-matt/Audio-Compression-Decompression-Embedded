@@ -142,48 +142,41 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
         input_data4 = bytes_to_int16(inputfile_data_buffer[i + 6], inputfile_data_buffer[i + 7]);
         
         
-       if (encodeType == COMPRESS){ 
+       if (encodeType & COMPRESS){ 
         
             codeword1 = codeword_compression(input_data1,signum(input_data1));
             codeword2 = codeword_compression(input_data2,signum(input_data2));
             codeword3 = codeword_compression(input_data3,signum(input_data3));
             codeword4 = codeword_compression(input_data4,signum(input_data4));
-            output_file_data_buffer[i / 2] = codeword1;
-            output_file_data_buffer[(i / 2) + 1] = codeword2;
-            output_file_data_buffer[(i / 2) + 2] = codeword3;
-            output_file_data_buffer[(i / 2) + 3] = codeword4;
-            fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
         
         } 
-        if (encodeType == DECOMPRESS){ 
+        else if (encodeType & DECOMPRESS){ 
         
             codeword1 = codeword_decompression(input_data1);
             codeword2 = codeword_decompression(input_data2);
             codeword3 = codeword_decompression(input_data3);
             codeword4 = codeword_decompression(input_data4);
-
-
-            output_file_data_buffer[i / 2] = codeword1;
-            output_file_data_buffer[(i / 2) + 1] = codeword2;
-            output_file_data_buffer[(i / 2) + 2] = codeword3;
-            output_file_data_buffer[(i / 2) + 3] = codeword4;
-            fwrite(output_file_data_buffer, overall_size , 1, output_file);
         
         } 
 
 
-  
+        output_file_data_buffer[i / 2] = codeword1;
+        output_file_data_buffer[(i / 2) + 1] = codeword2;
+        output_file_data_buffer[(i / 2) + 2] = codeword3;
+        output_file_data_buffer[(i / 2) + 3] = codeword4;
     }
 
-    
+    fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
 
     fclose(input_file);
     fclose(output_file);
-    // free(input_file_name);
-    // free(output_file_name);
-    // free(inputfile_data_buffer);
-    // free(output_file_data_buffer);
+    free(input_file_name);
+    free(output_file_name);
+    free(inputfile_data_buffer);
+    free(output_file_data_buffer);
     return 0;
+}
+
 }
 
 
