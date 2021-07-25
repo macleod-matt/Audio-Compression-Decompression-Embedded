@@ -35,9 +35,6 @@ int codeword_compression(int sample_magnitude, int sign)
     int codeword_tmp;
     
     
-
-    
-    
     debug_print("\n<============== Checking Compression operation ==============>");
 
     debug_print("\nSign before flip: %d", sign);
