@@ -163,11 +163,11 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword4 = codeword_decompression(input_data4);
 
 
-            utput_file_data_buffer[i / 2] = codeword1;
+            output_file_data_buffer[i / 2] = codeword1;
             output_file_data_buffer[(i / 2) + 1] = codeword2;
             output_file_data_buffer[(i / 2) + 2] = codeword3;
             output_file_data_buffer[(i / 2) + 3] = codeword4;
-            fwrite(output_file_data_buffer, (overall_size * 2), 1, output_file);
+            fwrite(output_file_data_buffer, overall_size , 1, output_file);
         
         } 
 

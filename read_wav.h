@@ -10,8 +10,8 @@
 
 
 #define BITS_PER_SAMPLE 8
-#define COMPRESS (1)
-#define DECOMPRESS (0)
+#define COMPRESS (0x1)
+#define DECOMPRESS (0x2)
 #define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 8
 
 
