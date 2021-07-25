@@ -142,7 +142,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
         input_data4 = bytes_to_int16(inputfile_data_buffer[i + 6], inputfile_data_buffer[i + 7]);
         
         
-       if (encodeType == COMPRESS){ 
+       if (encodeType == 1){ 
         
             codeword1 = codeword_compression(input_data1,signum(input_data1));
             codeword2 = codeword_compression(input_data2,signum(input_data2));
@@ -150,13 +150,12 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword4 = codeword_compression(input_data4,signum(input_data4));
         
         } 
-        if (encodeType == DECOMPRESS){ 
+        else if (encodeType == 2){ 
         
             codeword1 = codeword_decompression(input_data1);
             codeword2 = codeword_decompression(input_data2);
             codeword3 = codeword_decompression(input_data3);
             codeword4 = codeword_decompression(input_data4);
-        
         } 
 
 
@@ -176,13 +175,3 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
     // free(output_file_data_buffer);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
