@@ -12,7 +12,6 @@
 #include "mulawAPI.h"
 #include "read_wav.h"
 
-
 int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeType){
 
     FILE *input_file, *output_file;
@@ -41,7 +40,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
                                 | (wav_header.overall_size[3] << 24);
     unsigned int new_overall_size = overall_size + 8 - 44;
     
-    new_overall_size = new_overall_size >> 1 ;
+    new_overall_size = new_overall_size / 2;
     new_overall_size = new_overall_size + 44 - 8;
     byte_buffer_4[0] = (new_overall_size >> 24) & 0xFF;
     byte_buffer_4[1] = (new_overall_size >> 16) & 0xFF;
@@ -99,7 +98,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     // Wave (Block Align)  = (NumChannels * BitsPerSample) / 8
     fread(wav_header.blockAlign, sizeof(wav_header.blockAlign), 1, input_file);
-    unsigned int blockAlign = (numChannels * BITS_PER_SAMPLE) >>  3;
+    unsigned int blockAlign = (numChannels * BITS_PER_SAMPLE) / 8;
     byte_buffer_2[0] = (blockAlign >> 8) & 0xFF;
     byte_buffer_2[1] = blockAlign & 0xFF;
     fwrite(&byte_buffer_2[1], 1, 1, output_file);
@@ -131,21 +130,19 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
     overall_size -= 36;
 
     inputfile_data_buffer = malloc(overall_size * sizeof(char));
-    output_file_data_buffer = malloc((overall_size >> 1) * sizeof(char));
+    output_file_data_buffer = malloc((overall_size / 2) * sizeof(char));
 
     fread(inputfile_data_buffer, overall_size, 1, input_file);
-   // printf("%c",encodeType ); 
-    register int i;
-    for (i ^= 0; !(i & overall_size); i += 8) {
+
+    int i;
+    for (i = 0; i < overall_size; i = i + 8) {
         input_data1 = bytes_to_int16(inputfile_data_buffer[i], inputfile_data_buffer[i + 1]);
         input_data2 = bytes_to_int16(inputfile_data_buffer[i + 2], inputfile_data_buffer[i + 3]);
         input_data3 = bytes_to_int16(inputfile_data_buffer[i + 4], inputfile_data_buffer[i + 5]);
         input_data4 = bytes_to_int16(inputfile_data_buffer[i + 6], inputfile_data_buffer[i + 7]);
         
         
-       if (encodeType & COMPRESS){ 
-
-           // printf("Compresssing"); 
+       if (encodeType == COMPRESS){ 
         
             codeword1 = codeword_compression(input_data1,signum(input_data1));
             codeword2 = codeword_compression(input_data2,signum(input_data2));
@@ -153,9 +150,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword4 = codeword_compression(input_data4,signum(input_data4));
         
         } 
-        else if (encodeType & DECOMPRESS){ 
-
-           // printf("Decompressing"); 
+        if (encodeType == DECOMPRESS){ 
         
             codeword1 = codeword_decompression(input_data1);
             codeword2 = codeword_decompression(input_data2);
@@ -165,21 +160,21 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
         } 
 
 
-        output_file_data_buffer[i >> 1] = codeword1;
-        output_file_data_buffer[(i >> 1) + 1] = codeword2;
-        output_file_data_buffer[(i >> 1) + 2] = codeword3;
-        output_file_data_buffer[(i >> 1) + 3] = codeword4;
+        output_file_data_buffer[i / 2] = codeword1;
+        output_file_data_buffer[(i / 2) + 1] = codeword2;
+        output_file_data_buffer[(i / 2) + 2] = codeword3;
+        output_file_data_buffer[(i / 2) + 3] = codeword4;
     }
 
-    fwrite(output_file_data_buffer, (overall_size >> 1), 1, output_file);
+    fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
 
     fclose(input_file);
     fclose(output_file);
-    //free(input_file_name);
-    //free(output_file_name);
-    //free(inputfile_data_buffer);
-    //free(output_file_data_buffer);
-    return encodeType;
+    // free(input_file_name);
+    // free(output_file_name);
+    // free(inputfile_data_buffer);
+    // free(output_file_data_buffer);
+    return 0;
 }
 
 
