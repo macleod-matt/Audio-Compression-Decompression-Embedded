@@ -128,21 +128,21 @@ int codeword_decompression(int codeWord)
 {
     debug_print("\n<============== Checking Decompression operation ==============>");
 
-    int sign = ((codeWord << 6) & 0x2000 );
-    sign = !sign;
-
-    int sign_Most_Sig_Bit = ((sign << 13) & 0x2000);        //shift sign to correct position and mask
-    int step = (codeWord & 0x0F);   //Step
-    int chord = ((codeWord >> 4) & 0x07);  //chord
-    int step_shifted_by_chord = step << (chord+1);
-    int add_ones_on_either_side = (0x21 << chord);        // add the 1 A B C D 1 33 dec, 100001 bin, 21 hex
-    int megnatude = add_ones_on_either_side | step_shifted_by_chord;
-    int finalVal = sign_Most_Sig_Bit | megnatude;
-
-
     if(DEBUG)
     {
-       
+        int sign = ((codeWord << 6) & 0x2000 );
+        sign = !sign;
+
+        int sign_Most_Sig_Bit = ((sign << 13) & 0x2000);        //shift sign to correct position and mask
+        int step = (codeWord & 0x0F);   //Step
+        int chord = ((codeWord >> 4) & 0x07);  //chord
+        int step_shifted_by_chord = step << (chord+1);
+        int add_ones_on_either_side = (0x21 << chord);        // add the 1 A B C D 1 33 dec, 100001 bin, 21 hex
+        int megnatude = add_ones_on_either_side | step_shifted_by_chord;
+        int finalVal = sign_Most_Sig_Bit | megnatude;
+        
+        int Decompressed_Word = (((((codeWord << 6) & 0x2000) << 13) & 0x2000) | ((0x21 << ((codeWord >> 4) & 0x07)) | ((codeWord & 0x0F) << (((codeWord >> 4) & 0x07) + 1))));
+
         debug_print("\n Sign before flip: %d | ", !sign);
         decToBinary(!sign);
 
@@ -176,13 +176,11 @@ int codeword_decompression(int codeWord)
         decToBinary(megnatude);
 
         //int finalVal = sign_Most_Sig_Bit | megnatude;
-        debug_print("\n Decompressed Work: %d | ", finalVal);
-        decToBinary(finalVal);
+        debug_print("\n Decompressed Work: %d | ", Decompressed_Word);
+        decToBinary(Decompressed_Word);
     }
-      return finalVal;
+      return (((((codeWord << 6) & 0x2000) << 13) & 0x2000) | ((0x21 << ((codeWord >> 4) & 0x07)) | ((codeWord & 0x0F) << (((codeWord >> 4) & 0x07) + 1))));
 } 
-
-
 
 int Test(int sample)
 {
