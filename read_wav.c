@@ -166,7 +166,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     if (encodeType == DECOMPRESS){ 
 
-        output_file_data_buffer = malloc((overall_size) * sizeof(char));
+        output_file_data_buffer = malloc((overall_size * 2) * sizeof(char));
 
 
         for (i = 0; i < overall_size; i = i + 8) {
@@ -189,7 +189,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
 
             }
-            fwrite(output_file_data_buffer, (overall_size), 1, output_file);
+            fwrite(output_file_data_buffer, (overall_size * 2), 1, output_file);
 
     }
 
