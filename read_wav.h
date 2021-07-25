@@ -12,8 +12,8 @@
 #define BITS_PER_SAMPLE 8
 #define COMPRESS (1)
 #define DECOMPRESS (0)
-#define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 6
-
+#define bytes_to_int14(byte_one, byte_two) byte_one | byte_two << 6
+#define bytes_to_int16(byte_one, byte_two) byte_one | byte_two << 8
 
 // wave file header struct
 
