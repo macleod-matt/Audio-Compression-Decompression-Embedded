@@ -148,6 +148,8 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword2 = codeword_compression(input_data2,signum(input_data2));
             codeword3 = codeword_compression(input_data3,signum(input_data3));
             codeword4 = codeword_compression(input_data4,signum(input_data4));
+           
+           printf("Running Compression ITTERATION: %d", i);
         
         } 
         else if (encodeType == 2){ 
@@ -156,6 +158,8 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword2 = codeword_decompression(input_data2);
             codeword3 = codeword_decompression(input_data3);
             codeword4 = codeword_decompression(input_data4);
+            
+            printf("Running Decompression ITTERATION: %d", i);
         } 
 
 
