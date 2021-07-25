@@ -22,9 +22,9 @@ void decToBinary(int n)
         n = n / 2;
         i++;
     }
- 
+    int j;  
     // printing binary array in reverse order
-    for (int j = i - 1; j >= 0; j--)
+    for (j = i - 1; j >= 0; j--)
         printf("%d", binaryNum[j]);
 }
 
