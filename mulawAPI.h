@@ -20,18 +20,18 @@
 
 #define magnitude(sample) ((sample < 0) ? -sample : sample) 
 
-#define signum(num) (unsigned int)((num > 0)) 
+#define signum(num) (num & 0x2000) 
+
 
 
 // Functions 
  
 
-int codeword_compression(unsigned int sample_magnitude, int sign); 
+int codeword_compression(int sample_magnitude, int sign); 
 
 int codeword_decompression(int codeWord); 
 
 int Test(int sample); 
-
 
 #endif 
 
