@@ -180,32 +180,8 @@ int codeword_decompression(int codeWord)
         decToBinary(finalVal);
     }
       return finalVal;
-}
+} 
 
-
-int signum(int sample)
-{
-    if ((sample) & 0x2000)         
-    {
-        debug_print("\nNegative\n");
-        return (1); /* sign is ’0’ for negative samples */
-    }
-    else
-    {
-        debug_print("\nPositive\n");
-        return (0); /* sign is ’1’ for positive samples */
-    }
-}
-
-int magnitude(int sample)
-{   
-    if (sample < 0)
-    {
-        sample = -sample;
-    }
-    debug_print("Magnatude: %d", sample);
-    return (sample);
-}
 
 
 int Test(int sample)
