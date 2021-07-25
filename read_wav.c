@@ -148,6 +148,11 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword2 = codeword_compression(input_data2,signum(input_data2));
             codeword3 = codeword_compression(input_data3,signum(input_data3));
             codeword4 = codeword_compression(input_data4,signum(input_data4));
+            output_file_data_buffer[i / 2] = codeword1;
+            output_file_data_buffer[(i / 2) + 1] = codeword2;
+            output_file_data_buffer[(i / 2) + 2] = codeword3;
+            output_file_data_buffer[(i / 2) + 3] = codeword4;
+            fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
         
         } 
         if (encodeType == DECOMPRESS){ 
@@ -156,17 +161,21 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             codeword2 = codeword_decompression(input_data2);
             codeword3 = codeword_decompression(input_data3);
             codeword4 = codeword_decompression(input_data4);
+
+
+            utput_file_data_buffer[i / 2] = codeword1;
+            output_file_data_buffer[(i / 2) + 1] = codeword2;
+            output_file_data_buffer[(i / 2) + 2] = codeword3;
+            output_file_data_buffer[(i / 2) + 3] = codeword4;
+            fwrite(output_file_data_buffer, (overall_size * 2), 1, output_file);
         
         } 
 
 
-        output_file_data_buffer[i / 2] = codeword1;
-        output_file_data_buffer[(i / 2) + 1] = codeword2;
-        output_file_data_buffer[(i / 2) + 2] = codeword3;
-        output_file_data_buffer[(i / 2) + 3] = codeword4;
+  
     }
 
-    fwrite(output_file_data_buffer, (overall_size / 2), 1, output_file);
+    
 
     fclose(input_file);
     fclose(output_file);
