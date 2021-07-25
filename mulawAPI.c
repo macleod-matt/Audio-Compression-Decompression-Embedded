@@ -6,58 +6,42 @@
 #include <string.h>
 #include <time.h>
 //Convers decimal to bin
+
+// function to convert decimal to binary
 void decToBinary(int n)
 {
     // array to store binary number
-    int binaryVal[32];
+    int binaryNum[32];
  
     // counter for binary array
     int i = 0;
     while (n > 0) {
  
         // storing remainder in binary array
-        binaryVal[i] = n % 2;
+        binaryNum[i] = n % 2;
         n = n / 2;
         i++;
     }
  
     // printing binary array in reverse order
     for (int j = i - 1; j >= 0; j--)
-        printf("%d", binaryVal[j]);
+        printf("%d", binaryNum[j]);
 }
 
-int signum(int sample)
-{
-    if (sample < 0)
-    {
-        debug_print("\nNegative\n");
-        return (0); /* sign is ’0’ for negative samples */
-    }
-    else
-    {
-        debug_print("\nPositive\n");
-        return (1); /* sign is ’1’ for positive samples */
-    }
-}
 
-int magnitude(int sample)
-{   
-    if (sample < 0)
-    {
-        sample = -sample;
-    }
-    debug_print("Magnatude: %d", sample);
-    return (sample);
-}
-
-int codeword_compression(unsigned int sample_magnitude, int sign)
+int codeword_compression(int sample_magnitude, int sign)
 {
     int chord, step;
     int codeword_tmp;
     
-    sign = !(sign || sign);     //Flip Sign
+    
+
+    
     
     debug_print("\n<============== Checking Compression operation ==============>");
+
+    debug_print("\nSign before flip: %d", sign);
+    sign = !sign;     //Flip Sign   
 
     debug_print("\nSample Megnatude: %d | ", sample_magnitude);
     if(DEBUG) decToBinary(sample_magnitude);
@@ -77,7 +61,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 8) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 11))
@@ -86,7 +69,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 7) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 10))
@@ -95,7 +77,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 6) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 9))
@@ -104,7 +85,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 5) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 8))
@@ -113,7 +93,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 4) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 7))
@@ -122,7 +101,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 3) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 6))
@@ -131,7 +109,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 2) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     if (sample_magnitude & (1 << 5))
@@ -140,7 +117,6 @@ int codeword_compression(unsigned int sample_magnitude, int sign)
         step = (sample_magnitude >> 1) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        convertToBinary(codeword_tmp);
         return (codeword_tmp);
     }
     
@@ -152,45 +128,92 @@ int codeword_decompression(int codeWord)
 {
     debug_print("\n<============== Checking Decompression operation ==============>");
 
+    int sign = ((codeWord << 6) & 0x2000 );
+    sign = !sign;
+
     if(DEBUG)
     {
-        int Pos_Neg_Shift = (codeWord << 6);    //get sign
-        int Pos_Neg_Mask = !(Pos_Neg_Shift & 8192) || (Pos_Neg_Shift & 8192);   //Flip sign back
-        int shift_val = ((codeWord >> 4) & 7);  //Get Chord
-        int Word_Mask = (codeWord & 0xF);   //Get Step
-        int Word_Shift =  ((codeWord & 0xF) << ((codeWord >> 4) & 7));  //Get shifted Step
-        int FinalDecompressedWord = (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));
+       
+        debug_print("\n Sign before flip: %d | ", !sign);
+        decToBinary(!sign);
 
+        debug_print("\n Sign after flip: %d | ", sign);
+        decToBinary(sign);
 
-       debug_print("\n Shift to 14 bit: %d | ", Pos_Neg_Shift);
-        decToBinary(Pos_Neg_Shift);
-        debug_print("\n Sign: %d | ", Pos_Neg_Mask);
-        decToBinary(Pos_Neg_Mask);
-        debug_print("\n Step: %d | ", Word_Mask);
-        decToBinary(Word_Mask);
-        debug_print("\n Chord: %d | ", shift_val);
-        decToBinary(shift_val);
-        debug_print("\n Step_Decompressed: %d | ", Word_Shift);
-        decToBinary(Word_Shift);
-        debug_print("\n Word_Decompressed: %d | ", FinalDecompressedWord);
-        decToBinary(FinalDecompressedWord);
+        int sign_Most_Sig_Bit = ((sign << 13) & 0x2000);        //shift sign to correct position and mask
+
+        debug_print("\n Sign in 14th place: %d | ", sign_Most_Sig_Bit);
+        decToBinary(sign_Most_Sig_Bit);
+
+        int step = (codeWord & 0x0F);   //Step
+
+        debug_print("\n Step: %d | ", step);
+        decToBinary(step);
+
+        int chord = ((codeWord >> 4) & 0x07);  //chord
+        debug_print("\n Chord: %d | ", chord);
+        decToBinary(chord);
+
+        int step_shifted_by_chord = step << (chord+1);
+        debug_print("\n step_shifted_by_chord: %d | ", step_shifted_by_chord);
+        decToBinary(step_shifted_by_chord);
+
+        int add_ones_on_either_side = (0x21 << chord);        // add the 1 A B C D 1 33 dec, 100001 bin, 21 hex
+        debug_print("\n add_ones_on_either_side: %d | ", add_ones_on_either_side);
+        decToBinary(add_ones_on_either_side);
+
+        int megnatude = add_ones_on_either_side | step_shifted_by_chord;
+        debug_print("\n megnatude: %d | ", megnatude);
+        decToBinary(megnatude);
+
+        int finalVal = sign_Most_Sig_Bit | megnatude;
+        debug_print("\n Decompressed Work: %d | ", finalVal);
+        decToBinary(finalVal);
+
+    
+        return finalVal; 
     }
-
-      return (((codeWord << 6) & 0x2000 ) ^ 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1));  //Decompressed Word
+      return (((!sign) & 0x2000 ^ ((codeWord & 0xF) << ((codeWord >> 4) & 0x7))) | (33 << (((codeWord >> 4) & 0x7)-1)));  //Decompressed Word
 }
+
+
+int signum(int sample)
+{
+    if ((sample) & 0x2000)         
+    {
+        debug_print("\nNegative\n");
+        return (1); /* sign is ’0’ for negative samples */
+    }
+    else
+    {
+        debug_print("\nPositive\n");
+        return (0); /* sign is ’1’ for positive samples */
+    }
+}
+
+int magnitude(int sample)
+{   
+    if (sample < 0)
+    {
+        sample = -sample;
+    }
+    debug_print("Magnatude: %d", sample);
+    return (sample);
+}
+
 
 int Test(int sample)
 {
     int Compressed_Word = codeword_compression(magnitude(sample), signum(sample));
     int Decompressed_Word = codeword_decompression(Compressed_Word);
 
-    printf("\n<========================= TESTING ============================>");
+    printf("\n<Testing..");
     printf("\nInput: %d | ", sample);
-    convertToBinary(sample);
+    decToBinary(sample);
     printf("\nCompressed: %d | ", Compressed_Word);
-    convertToBinary(Compressed_Word);
+    decToBinary(Compressed_Word);
     printf("\nDecompressed: %d | ", Decompressed_Word);
-    convertToBinary(Decompressed_Word);
+    decToBinary(Decompressed_Word);
 
     return 0;
 }
