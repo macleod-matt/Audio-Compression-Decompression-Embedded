@@ -47,7 +47,7 @@ int main(int argc, char **argv){
         
         start = clock(); 
 
-        encode_wave_file(inFileName,compressedFileName, COMPRESS) ;  
+        encode_wave_file(inFileName,compressedFileName, 1) ;  
 
         stop = clock(); 
         
@@ -55,7 +55,7 @@ int main(int argc, char **argv){
 
         start2 = clock(); 
         
-        encode_wave_file(compressedFileName,decompressedFileName, DECOMPRESS);
+        encode_wave_file(compressedFileName,decompressedFileName, 2);
         
         stop2 = clock(); 
 
