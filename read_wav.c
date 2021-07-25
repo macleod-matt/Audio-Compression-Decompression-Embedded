@@ -19,7 +19,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
     wave_header_t wav_header; 
 
     unsigned char byte_buffer_2[2], byte_buffer_4[4];
-    
+ unsigned char *inputfile_data_buffer, *output_file_data_buffer;    
     
     int16_t input_data1, input_data2, input_data3, input_data4;
     int8_t codeword1, codeword2, codeword3, codeword4;
@@ -129,7 +129,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
     overall_size -= 36;
 
 
-    unsigned char* inputfile_data_buffer[overall_size * sizeof(char))]; 
+    inputfile_data_buffer = malloc(overall_size * sizeof(char));
 
     fread(inputfile_data_buffer, overall_size, 1, input_file);
 
@@ -137,7 +137,8 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     if (encodeType == COMPRESS){ 
 
-        unsigned char* output_file_data_buffer[(overall_size / 2) * sizeof(char)];
+
+        output_file_data_buffer = malloc((overall_size / 2) * sizeof(char));
 
      
         for (i = 0; i < overall_size; i = i + 8) {
@@ -163,9 +164,10 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
 
     }
 
-    else if (encodeType == DECOMPRESS){ 
+    if (encodeType == DECOMPRESS){ 
 
-        unsigned char* output_file_data_buffer[(overall_size) * sizeof(char)];
+output_file_data_buffer = malloc((overall_size) * sizeof(char));
+
 
         for (i = 0; i < overall_size; i = i + 8) {
             
