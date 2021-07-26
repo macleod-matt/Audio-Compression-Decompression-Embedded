@@ -29,10 +29,10 @@ void decToBinary(int n)
 }
 
 
-int codeword_compression(int sample_magnitude, int sign)
+int codeword_compression(register int sample_magnitude, register int sign)
 {
-    int chord, step;
-    int codeword_tmp;
+    register int chord, step;
+    register int codeword_tmp;
     
     
     debug_print("\n<============== Checking Compression operation ==============>");
@@ -58,7 +58,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 8) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 11))
     {
@@ -66,7 +66,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 7) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 10))
     {
@@ -74,7 +74,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 6) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 9))
     {
@@ -82,7 +82,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 5) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 8))
     {
@@ -90,7 +90,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 4) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 7))
     {
@@ -98,7 +98,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 3) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 6))
     {
@@ -106,7 +106,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 2) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     if (sample_magnitude & (1 << 5))
     {
@@ -114,7 +114,7 @@ int codeword_compression(int sample_magnitude, int sign)
         step = (sample_magnitude >> 1) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
+        return ((char)codeword_tmp);
     }
     
     debug_print("COULD NOT MEET IF STATMENT CONDITION");
@@ -176,7 +176,7 @@ int codeword_decompression(int codeWord)
         debug_print("\n Decompressed Work: %d | ", finalVal);
         decToBinary(finalVal);
     }
-      return finalVal;
+      return (char)finalVal;
 } 
 
 
