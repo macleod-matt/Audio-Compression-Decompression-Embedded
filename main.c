@@ -59,7 +59,7 @@ int main(int argc, char **argv){
         
         stop2 = clock(); 
 
-        decompression_time = (double) ((double)stop - (double)start) / CLOCKS_PER_SEC;
+        decompression_time = (double) ((double)stop2 - (double)start2) / CLOCKS_PER_SEC;
 
 
         printf("Complete\n"); 
