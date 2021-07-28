@@ -18,7 +18,8 @@
 #endif 
 
 
-#define magnitude(sample) ((sample < 0) ? -sample : sample) 
+//#define magnitude(sample) ((sample < 0) ? -sample : sample)           //This is for +/- inputs
+#define Mag(sample) ((sample & 0x2000) ? sample & 0x1FFF : sample)      //This is for 0/1 inputs that work with the program
 
 #define signum(num) (num & 0x2000) 
 
