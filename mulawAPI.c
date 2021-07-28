@@ -200,9 +200,9 @@ int signum(int sample)
 
 int magnitude(int sample)
 {
-    if (sample < 0)
+    if (sample > 0x2000)
     {
-        sample = -sample;
+        sample = (sample & 0x1FFF);
     }
     debug_print("Magnatude: %d", sample);
     return (sample);
