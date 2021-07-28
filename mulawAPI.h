@@ -33,5 +33,7 @@ int codeword_decompression(int codeWord);
 
 int Test(int sample); 
 
+int LookUpTable(int input);
+
 #endif 
 

@@ -60,9 +60,8 @@ int main(int argc, char **argv)
         decompression_time = (double)((double)stop2 - (double)start2) / CLOCKS_PER_SEC;
 
         printf("Complete\n");
-        printf("Audio Compression Time:%lf  Seconds\n", compression_time);
+        printf("Audio Compression Time With Look Up Table:%lf  Seconds\n", compression_time);
         printf("Audio Decompression Time: %lf  Seconds \n", decompression_time);
     }
-
     return 0;
 }
