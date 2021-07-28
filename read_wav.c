@@ -19,7 +19,7 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
     wave_header_t wav_header; 
 
     unsigned char byte_buffer_2[2], byte_buffer_4[4];
- unsigned char *inputfile_data_buffer, *output_file_data_buffer;    
+    unsigned char *inputfile_data_buffer, *output_file_data_buffer;    
     
     int16_t input_data1, input_data2, input_data3, input_data4;
     int8_t codeword1, codeword2, codeword3, codeword4;
