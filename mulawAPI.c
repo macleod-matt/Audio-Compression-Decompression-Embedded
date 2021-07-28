@@ -31,7 +31,7 @@ void decToBinary(int n)
 
 int codeword_compression(register int sample_magnitude, register int sign)
 {
-    register int chord, step, codeword_tmp;
+    register int chord, step, codeword_tmp, NumberOfBits;
     
     debug_print("\n<============== Checking Compression operation ==============>");
 
@@ -43,72 +43,86 @@ int codeword_compression(register int sample_magnitude, register int sign)
     debug_print("\nSample Sign: %d | ", sign);
     if(DEBUG) decToBinary(sign);
     debug_print("\n");
-    
-    if (sample_magnitude & (1 << 12))
+
+    NumberOfBits ^= NumberOfBits;
+
+    while (sample_magnitude > 0)
     {
+        sample_magnitude = sample_magnitude >> 1;
+        NumberOfBits++;
+    }
+
+    switch (NumberOfBits)
+    {
+    case 14:
         chord = 0x7;
         step = (sample_magnitude >> 8) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 11))
-    {
+        break;
+
+    case 13:
         chord = 0x6;
         step = (sample_magnitude >> 7) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 10))
-    {
+        break;
+
+    case 12:
         chord = 0x5;
         step = (sample_magnitude >> 6) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 9))
-    {
+        break;
+
+    case 11:
         chord = 0x4;
         step = (sample_magnitude >> 5) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 8))
-    {
+        break;
+
+    case 10:
         chord = 0x3;
         step = (sample_magnitude >> 4) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 7))
-    {
+        break;
+
+    case 9:
         chord = 0x2;
         step = (sample_magnitude >> 3) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 6))
-    {
+        break;
+
+    case 8:
         chord = 0x1;
         step = (sample_magnitude >> 2) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 5))
-    {
+        break;
+
+    case 7:
         chord = 0x0;
         step = (sample_magnitude >> 1) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
+        break;
+
+    default:
+        return 0;
+        break;
     }
-    
+
     if(sample_magnitude > 16383)    //check if input is within upper bound
     {
         printf("\n!!!!! INPUT IS TOO LARGE !!!!!\n");
@@ -186,7 +200,8 @@ int codeword_decompression(int codeWord)
 
 int Test(int sample)
 {
-    printf("\nTurn debugging to 1 in mulawAPI.h for debugging mode\n\n");
+    printf("\nTurn debugging to 1 in mulawAPI.h for debugging mode\n"
+            "Note this program uses a switch statment for compression\n");
 
     int Compressed_Word = codeword_compression(magnitude(sample), signum(sample));
     int Decompressed_Word = codeword_decompression(Compressed_Word);
