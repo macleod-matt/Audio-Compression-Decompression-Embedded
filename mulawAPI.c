@@ -28,66 +28,27 @@ void decToBinary(int n)
         printf("%d", binaryNum[j]);
 }
 
-
 int codeword_compression(register int sample_magnitude, register int sign)
 {
     register int chord, step, codeword_tmp;
-    
+
     debug_print("\n<============== Checking Compression operation ==============>");
 
     debug_print("\nSign before flip: %d", sign);
-    sign = !sign;     //Flip Sign   
+    sign = !sign; //Flip Sign
 
     debug_print("\nSample Megnatude: %d | ", sample_magnitude);
-    if(DEBUG) decToBinary(sample_magnitude);
+    if (DEBUG)
+        decToBinary(sample_magnitude);
     debug_print("\nSample Sign: %d | ", sign);
-    if(DEBUG) decToBinary(sign);
+    if (DEBUG)
+        decToBinary(sign);
     debug_print("\n");
-    
-    if (sample_magnitude & (1 << 12))
+
+    if (sample_magnitude & (1 << 5))
     {
-        chord = 0x7;
-        step = (sample_magnitude >> 8) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 11))
-    {
-        chord = 0x6;
-        step = (sample_magnitude >> 7) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 10))
-    {
-        chord = 0x5;
-        step = (sample_magnitude >> 6) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 9))
-    {
-        chord = 0x4;
-        step = (sample_magnitude >> 5) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 8))
-    {
-        chord = 0x3;
-        step = (sample_magnitude >> 4) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 7))
-    {
-        chord = 0x2;
-        step = (sample_magnitude >> 3) & 0xF;
+        chord = 0x0;
+        step = (sample_magnitude >> 1) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
@@ -100,22 +61,63 @@ int codeword_compression(register int sample_magnitude, register int sign)
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
     }
-    if (sample_magnitude & (1 << 5))
+    if (sample_magnitude & (1 << 7))
     {
-        chord = 0x0;
-        step = (sample_magnitude >> 1) & 0xF;
+        chord = 0x2;
+        step = (sample_magnitude >> 3) & 0xF;
         codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
         debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
         return (codeword_tmp);
     }
-    
-    if(sample_magnitude > 16383)    //check if input is within upper bound
+    if (sample_magnitude & (1 << 8))
+    {
+        chord = 0x3;
+        step = (sample_magnitude >> 4) & 0xF;
+        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
+        debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
+        return (codeword_tmp);
+    }
+    if (sample_magnitude & (1 << 9))
+    {
+        chord = 0x4;
+        step = (sample_magnitude >> 5) & 0xF;
+        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
+        debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
+        return (codeword_tmp);
+    }
+    if (sample_magnitude & (1 << 10))
+    {
+        chord = 0x5;
+        step = (sample_magnitude >> 6) & 0xF;
+        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
+        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
+        return (codeword_tmp);
+    }
+    if (sample_magnitude & (1 << 11))
+    {
+        chord = 0x6;
+        step = (sample_magnitude >> 7) & 0xF;
+        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
+        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
+        return (codeword_tmp);
+    }
+
+    if (sample_magnitude & (1 << 12))
+    {
+        chord = 0x7;
+        step = (sample_magnitude >> 8) & 0xF;
+        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
+        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
+        return (codeword_tmp);
+    }
+
+    if (sample_magnitude > 16383) //check if input is within upper bound
     {
         printf("\n!!!!! INPUT IS TOO LARGE !!!!!\n");
     }
 
     debug_print("COULD NOT MEET IF STATMENT CONDITION");
-    return 0;   //Error
+    return 0; //Error
 }
 
 int codeword_decompression(int codeWord)
