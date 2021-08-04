@@ -1,352 +1,422 @@
+	.arch armv4t
+	.fpu softvfp
+	.eabi_attribute 20, 1
+	.eabi_attribute 21, 1
+	.eabi_attribute 23, 3
+	.eabi_attribute 24, 1
+	.eabi_attribute 25, 1
+	.eabi_attribute 26, 2
+	.eabi_attribute 30, 6
+	.eabi_attribute 18, 4
 	.file	"mulawAPI.c"
 	.section	.rodata
+	.align	2
 .LC0:
-	.string	"%d"
+	.ascii	"%d\000"
 	.text
-	.globl	decToBinary
-	.type	decToBinary, @function
+	.align	2
+	.global	decToBinary
+	.type	decToBinary, %function
 decToBinary:
-.LFB0:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	subq	$160, %rsp
-	movl	%edi, -148(%rbp)
-	movl	$0, -4(%rbp)
-	jmp	.L2
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 144
+	@ frame_needed = 1, uses_anonymous_args = 0
+	stmfd	sp!, {fp, lr}
+	add	fp, sp, #4
+	sub	sp, sp, #144
+	str	r0, [fp, #-144]
+	mov	r3, #0
+	str	r3, [fp, #-12]
+	b	.L2
 .L3:
-	movl	-148(%rbp), %eax
-	cltd
-	shrl	$31, %edx
-	addl	%edx, %eax
-	andl	$1, %eax
-	subl	%edx, %eax
-	movl	%eax, %edx
-	movl	-4(%rbp), %eax
-	cltq
-	movl	%edx, -144(%rbp,%rax,4)
-	movl	-148(%rbp), %eax
-	movl	%eax, %edx
-	shrl	$31, %edx
-	addl	%edx, %eax
-	sarl	%eax
-	movl	%eax, -148(%rbp)
-	addl	$1, -4(%rbp)
+	ldr	r0, [fp, #-12]
+	ldr	r2, [fp, #-144]
+	mov	r3, r2, asr #31
+	mov	r1, r3, lsr #31
+	add	r3, r2, r1
+	and	r3, r3, #1
+	rsb	r3, r1, r3
+	mov	r1, r3
+	mvn	r2, #135
+	mov	r3, r0, asl #2
+	sub	r0, fp, #4
+	add	r3, r0, r3
+	add	r3, r3, r2
+	str	r1, [r3, #0]
+	ldr	r2, [fp, #-144]
+	mov	r3, r2, lsr #31
+	add	r3, r3, r2
+	mov	r3, r3, asr #1
+	str	r3, [fp, #-144]
+	ldr	r3, [fp, #-12]
+	add	r3, r3, #1
+	str	r3, [fp, #-12]
 .L2:
-	cmpl	$0, -148(%rbp)
-	jg	.L3
-	movl	-4(%rbp), %eax
-	subl	$1, %eax
-	movl	%eax, -8(%rbp)
-	jmp	.L4
+	ldr	r3, [fp, #-144]
+	cmp	r3, #0
+	bgt	.L3
+	ldr	r3, [fp, #-12]
+	sub	r3, r3, #1
+	str	r3, [fp, #-8]
+	b	.L4
 .L5:
-	movl	-8(%rbp), %eax
-	cltq
-	movl	-144(%rbp,%rax,4), %eax
-	movl	%eax, %esi
-	movl	$.LC0, %edi
-	movl	$0, %eax
-	call	printf
-	subl	$1, -8(%rbp)
+	ldr	r3, [fp, #-8]
+	mvn	r2, #135
+	mov	r3, r3, asl #2
+	sub	r1, fp, #4
+	add	r3, r1, r3
+	add	r3, r3, r2
+	ldr	r3, [r3, #0]
+	ldr	r0, .L7
+	mov	r1, r3
+	bl	printf
+	ldr	r3, [fp, #-8]
+	sub	r3, r3, #1
+	str	r3, [fp, #-8]
 .L4:
-	cmpl	$0, -8(%rbp)
-	jns	.L5
-	leave
-	.cfi_def_cfa 7, 8
-	ret
-	.cfi_endproc
-.LFE0:
-	.size	decToBinary, .-decToBinary
-	.globl	codeword_compression
-	.type	codeword_compression, @function
-codeword_compression:
-.LFB1:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	pushq	%r12
-	pushq	%rbx
-	.cfi_offset 12, -24
-	.cfi_offset 3, -32
-	movl	%edi, %eax
-	movl	%esi, %edx
-	testl	%edx, %edx
-	sete	%dl
-	movzbl	%dl, %edx
-	movl	$0, %ebx
-	jmp	.L7
+	ldr	r3, [fp, #-8]
+	cmp	r3, #0
+	bge	.L5
+	sub	sp, fp, #4
+	ldmfd	sp!, {fp, lr}
+	bx	lr
 .L8:
-	sarl	%eax
-	addl	$1, %ebx
+	.align	2
 .L7:
-	testl	%eax, %eax
-	jg	.L8
-	leal	-7(%rbx), %ecx
-	cmpl	$7, %ecx
-	ja	.L9
-	movl	%ecx, %ecx
-	movq	.L11(,%rcx,8), %rcx
-	jmp	*%rcx
-	.section	.rodata
-	.align 8
-	.align 4
+	.word	.LC0
+	.size	decToBinary, .-decToBinary
+	.align	2
+	.global	codeword_compression
+	.type	codeword_compression, %function
+codeword_compression:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 32
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	str	fp, [sp, #-4]!
+	add	fp, sp, #0
+	sub	sp, sp, #36
+	str	r0, [fp, #-28]
+	str	r1, [fp, #-32]
+	ldr	r1, [fp, #-32]
+	cmp	r1, #0
+	movne	r2, #0
+	moveq	r2, #1
+	str	r2, [fp, #-32]
+	mov	r3, #0
+	str	r3, [fp, #-8]
+	b	.L10
 .L11:
-	.quad	.L10
-	.quad	.L12
-	.quad	.L13
-	.quad	.L14
-	.quad	.L15
-	.quad	.L16
-	.quad	.L17
-	.quad	.L18
-	.text
-.L18:
-	movl	$7, %ebx
-	sarl	$8, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L17:
-	movl	$6, %ebx
-	sarl	$7, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L16:
-	movl	$5, %ebx
-	sarl	$6, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L15:
-	movl	$4, %ebx
-	sarl	$5, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L14:
-	movl	$3, %ebx
-	sarl	$4, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L13:
-	movl	$2, %ebx
-	sarl	$3, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L12:
-	movl	$1, %ebx
-	sarl	$2, %eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
+	ldr	r1, [fp, #-28]
+	mov	r1, r1, asr #1
+	str	r1, [fp, #-28]
+	ldr	r2, [fp, #-8]
+	add	r2, r2, #1
+	str	r2, [fp, #-8]
 .L10:
-	movl	$0, %ebx
-	sarl	%eax
-	andl	$15, %eax
-	movl	%eax, %r12d
-	sall	$7, %edx
-	movl	%ebx, %eax
-	sall	$4, %eax
-	xorl	%edx, %eax
-	xorl	%r12d, %eax
-	movl	%eax, %ebx
-	movl	%ebx, %eax
-	jmp	.L19
-.L9:
-	movl	$0, %eax
-.L19:
-	popq	%rbx
-	popq	%r12
-	popq	%rbp
-	.cfi_def_cfa 7, 8
-	ret
-	.cfi_endproc
-.LFE1:
-	.size	codeword_compression, .-codeword_compression
-	.globl	codeword_decompression
-	.type	codeword_decompression, @function
-codeword_decompression:
-.LFB2:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	movl	%edi, -4(%rbp)
-	movl	-4(%rbp), %eax
-	sall	$6, %eax
-	andl	$8192, %eax
-	testl	%eax, %eax
-	jne	.L21
-	movl	$8192, %eax
-	jmp	.L22
+	ldr	r3, [fp, #-28]
+	cmp	r3, #0
+	bgt	.L11
+	ldr	r1, [fp, #-8]
+	sub	r3, r1, #7
+	cmp	r3, #7
+	ldrls	pc, [pc, r3, asl #2]
+	b	.L12
 .L21:
-	movl	$0, %eax
+	.word	.L13
+	.word	.L14
+	.word	.L15
+	.word	.L16
+	.word	.L17
+	.word	.L18
+	.word	.L19
+	.word	.L20
+.L20:
+	mov	r2, #7
+	str	r2, [fp, #-20]
+	ldr	r1, [fp, #-28]
+	mov	r3, r1, asr #8
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L19:
+	mov	r1, #6
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #7
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L18:
+	mov	r1, #5
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #6
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L17:
+	mov	r1, #4
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #5
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L16:
+	mov	r1, #3
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #4
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L15:
+	mov	r1, #2
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #3
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L14:
+	mov	r1, #1
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #2
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L13:
+	mov	r1, #0
+	str	r1, [fp, #-20]
+	ldr	r2, [fp, #-28]
+	mov	r3, r2, asr #1
+	and	r3, r3, #15
+	str	r3, [fp, #-16]
+	ldr	r3, [fp, #-32]
+	mov	r2, r3, asl #7
+	ldr	r1, [fp, #-20]
+	mov	r3, r1, asl #4
+	eor	r3, r2, r3
+	ldr	r2, [fp, #-16]
+	eor	r3, r3, r2
+	str	r3, [fp, #-12]
+	ldr	r3, [fp, #-12]
+	str	r3, [fp, #-24]
+	b	.L22
+.L12:
+	mov	r1, #0
+	str	r1, [fp, #-24]
 .L22:
-	movl	-4(%rbp), %edx
-	sarl	$4, %edx
-	andl	$7, %edx
-	movl	$33, %esi
-	movl	%edx, %ecx
-	sall	%cl, %esi
-	movl	-4(%rbp), %edx
-	movl	%edx, %edi
-	andl	$15, %edi
-	movl	-4(%rbp), %edx
-	sarl	$4, %edx
-	andl	$7, %edx
-	addl	$1, %edx
-	movl	%edx, %ecx
-	sall	%cl, %edi
-	movl	%edi, %edx
-	orl	%esi, %edx
-	orl	%edx, %eax
-	popq	%rbp
-	.cfi_def_cfa 7, 8
-	ret
-	.cfi_endproc
-.LFE2:
+	ldr	r3, [fp, #-24]
+	mov	r0, r3
+	add	sp, fp, #0
+	ldmfd	sp!, {fp}
+	bx	lr
+	.size	codeword_compression, .-codeword_compression
+	.align	2
+	.global	codeword_decompression
+	.type	codeword_decompression, %function
+codeword_decompression:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	str	fp, [sp, #-4]!
+	add	fp, sp, #0
+	sub	sp, sp, #12
+	str	r0, [fp, #-8]
+	ldr	r3, [fp, #-8]
+	mov	r3, r3, asl #6
+	and	r3, r3, #8192
+	cmp	r3, #0
+	bne	.L25
+	mov	r2, #8192
+	str	r2, [fp, #-12]
+	b	.L26
+.L25:
+	mov	r3, #0
+	str	r3, [fp, #-12]
+.L26:
+	ldr	r3, [fp, #-8]
+	mov	r3, r3, asr #4
+	and	r2, r3, #7
+	mov	r3, #33
+	mov	r1, r3, asl r2
+	ldr	r3, [fp, #-8]
+	and	r2, r3, #15
+	ldr	r3, [fp, #-8]
+	mov	r3, r3, asr #4
+	and	r3, r3, #7
+	add	r3, r3, #1
+	mov	r3, r2, asl r3
+	orr	r3, r1, r3
+	ldr	r2, [fp, #-12]
+	orr	r3, r2, r3
+	mov	r0, r3
+	add	sp, fp, #0
+	ldmfd	sp!, {fp}
+	bx	lr
 	.size	codeword_decompression, .-codeword_decompression
 	.section	.rodata
-	.align 8
+	.align	2
 .LC1:
-	.string	"\nTurn debugging to 1 in mulawAPI.h for debugging mode\nNote this program uses a switch statment for compression"
+	.ascii	"\012Turn debugging to 1 in mulawAPI.h for debugging"
+	.ascii	" mode\012Note this program uses a switch statment f"
+	.ascii	"or compression\000"
+	.align	2
 .LC2:
-	.string	"\n<Testing.."
+	.ascii	"\012<Testing..\000"
+	.align	2
 .LC3:
-	.string	"\nInput: %d | "
+	.ascii	"\012Input: %d | \000"
+	.align	2
 .LC4:
-	.string	"\nCompressed: %d | "
+	.ascii	"\012Compressed: %d | \000"
+	.align	2
 .LC5:
-	.string	"\nDecompressed: %d | "
+	.ascii	"\012Decompressed: %d | \000"
 	.text
-	.globl	Test
-	.type	Test, @function
+	.align	2
+	.global	Test
+	.type	Test, %function
 Test:
-.LFB3:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	subq	$32, %rsp
-	movl	%edi, -20(%rbp)
-	movl	$.LC1, %edi
-	call	puts
-	movl	-20(%rbp), %eax
-	andl	$8192, %eax
-	movl	%eax, %edx
-	movl	-20(%rbp), %eax
-	andl	$8192, %eax
-	testl	%eax, %eax
-	je	.L25
-	movl	-20(%rbp), %eax
-	andl	$8191, %eax
-	jmp	.L26
-.L25:
-	movl	-20(%rbp), %eax
-.L26:
-	movl	%edx, %esi
-	movl	%eax, %edi
-	call	codeword_compression
-	movl	%eax, -4(%rbp)
-	movl	-4(%rbp), %eax
-	movl	%eax, %edi
-	call	codeword_decompression
-	movl	%eax, -8(%rbp)
-	movl	$.LC2, %edi
-	movl	$0, %eax
-	call	printf
-	movl	-20(%rbp), %eax
-	movl	%eax, %esi
-	movl	$.LC3, %edi
-	movl	$0, %eax
-	call	printf
-	movl	-20(%rbp), %eax
-	movl	%eax, %edi
-	call	decToBinary
-	movl	-4(%rbp), %eax
-	movl	%eax, %esi
-	movl	$.LC4, %edi
-	movl	$0, %eax
-	call	printf
-	movl	-4(%rbp), %eax
-	movl	%eax, %edi
-	call	decToBinary
-	movl	-8(%rbp), %eax
-	movl	%eax, %esi
-	movl	$.LC5, %edi
-	movl	$0, %eax
-	call	printf
-	movl	-8(%rbp), %eax
-	movl	%eax, %edi
-	call	decToBinary
-	movl	$0, %eax
-	leave
-	.cfi_def_cfa 7, 8
-	ret
-	.cfi_endproc
-.LFE3:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	stmfd	sp!, {fp, lr}
+	add	fp, sp, #4
+	sub	sp, sp, #16
+	str	r0, [fp, #-16]
+	ldr	r0, .L32
+	bl	puts
+	ldr	r3, [fp, #-16]
+	and	r3, r3, #8192
+	cmp	r3, #0
+	beq	.L29
+	ldr	r3, [fp, #-16]
+	mov	r3, r3, asl #19
+	str	r3, [fp, #-20]
+	ldr	r3, [fp, #-20]
+	mov	r3, r3, lsr #19
+	str	r3, [fp, #-20]
+	b	.L30
+.L29:
+	ldr	r3, [fp, #-16]
+	str	r3, [fp, #-20]
+.L30:
+	ldr	r3, [fp, #-16]
+	and	r3, r3, #8192
+	ldr	r0, [fp, #-20]
+	mov	r1, r3
+	bl	codeword_compression
+	mov	r3, r0
+	str	r3, [fp, #-12]
+	ldr	r0, [fp, #-12]
+	bl	codeword_decompression
+	mov	r3, r0
+	str	r3, [fp, #-8]
+	ldr	r0, .L32+4
+	bl	printf
+	ldr	r0, .L32+8
+	ldr	r1, [fp, #-16]
+	bl	printf
+	ldr	r0, [fp, #-16]
+	bl	decToBinary
+	ldr	r0, .L32+12
+	ldr	r1, [fp, #-12]
+	bl	printf
+	ldr	r0, [fp, #-12]
+	bl	decToBinary
+	ldr	r0, .L32+16
+	ldr	r1, [fp, #-8]
+	bl	printf
+	ldr	r0, [fp, #-8]
+	bl	decToBinary
+	mov	r3, #0
+	mov	r0, r3
+	sub	sp, fp, #4
+	ldmfd	sp!, {fp, lr}
+	bx	lr
+.L33:
+	.align	2
+.L32:
+	.word	.LC1
+	.word	.LC2
+	.word	.LC3
+	.word	.LC4
+	.word	.LC5
 	.size	Test, .-Test
-	.ident	"GCC: (GNU) 4.8.5 20150623 (Red Hat 4.8.5-44)"
-	.section	.note.GNU-stack,"",@progbits
+	.ident	"GCC: (Sourcery G++ Lite 2008q3-72) 4.3.2"
+	.section	.note.GNU-stack,"",%progbits
