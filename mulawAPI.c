@@ -45,8 +45,8 @@ int Test(int sample)
 {
     printf("\nTurn debugging to 1 in mulawAPI.h for debugging mode\n\n");
 
-    codeword_compression(void);
-    codeword_decompression(void);
+    codeword_compression();
+    codeword_decompression();
 
     return 0;
 }

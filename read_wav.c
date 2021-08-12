@@ -148,10 +148,10 @@ int encode_wave_file(char* input_file_name, char* output_file_name, bool encodeT
             input_data3 = bytes_to_int16(inputfile_data_buffer[i + 4], inputfile_data_buffer[i + 5]);
             input_data4 = bytes_to_int16(inputfile_data_buffer[i + 6], inputfile_data_buffer[i + 7]);
             
-            codeword_compression(void);
-            codeword_compression(void);
-            codeword_compression(void);
-            codeword_compression(void);
+            codeword_compression();
+            codeword_compression();
+            codeword_compression();
+            codeword_compression();
             codeword1 = 0;
             codeword2 = 0;
             codeword3 = 0;

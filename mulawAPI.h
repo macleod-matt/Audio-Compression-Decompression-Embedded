@@ -28,9 +28,9 @@
 // Functions 
  
 
-void codeword_compression(void)
+void codeword_compression(void);
 
-void codeword_decompression(void)
+void codeword_decompression(void);
 
 int Test(int sample); 
 
