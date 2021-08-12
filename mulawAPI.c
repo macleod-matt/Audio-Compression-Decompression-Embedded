@@ -31,6 +31,8 @@ void decToBinary(int n)
 
 int codeword_compression(int sample_magnitude, int sign)
 {
+    sample_magnitude += 33;
+
     if(sample_magnitude >= 8192)
     {
         sample_magnitude = (sample_magnitude - 8192);
@@ -142,6 +144,8 @@ int codeword_decompression(int codeWord)
     int megnatude = add_ones_on_either_side | step_shifted_by_chord;
     int finalVal = sign_Most_Sig_Bit | megnatude;
 
+    finalVal -= 33;
+    
     if (DEBUG)
     {
 
