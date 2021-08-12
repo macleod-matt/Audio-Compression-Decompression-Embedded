@@ -28,160 +28,15 @@ void decToBinary(int n)
         printf("%d", binaryNum[j]);
 }
 
-int codeword_compression(register int sample_magnitude, register int sign)
+void codeword_compression(void)
 {
-    register int chord, step, codeword_tmp;
-
-    debug_print("\n<============== Checking Compression operation ==============>");
-
-    debug_print("\nSign before flip: %d", sign);
-    sign = !sign; //Flip Sign
-
-    debug_print("\nSample Megnatude: %d | ", sample_magnitude);
-    if (DEBUG)
-        decToBinary(sample_magnitude);
-    debug_print("\nSample Sign: %d | ", sign);
-    if (DEBUG)
-        decToBinary(sign);
-    debug_print("\n");
-
-    if (sample_magnitude & (1 << 5))
-    {
-        chord = 0x0;
-        step = (sample_magnitude >> 1) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 6))
-    {
-        chord = 0x1;
-        step = (sample_magnitude >> 2) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 7))
-    {
-        chord = 0x2;
-        step = (sample_magnitude >> 3) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 8))
-    {
-        chord = 0x3;
-        step = (sample_magnitude >> 4) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 9))
-    {
-        chord = 0x4;
-        step = (sample_magnitude >> 5) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("\nchord: %d, step: %d, codeword_tmp: %d |", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 10))
-    {
-        chord = 0x5;
-        step = (sample_magnitude >> 6) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-    if (sample_magnitude & (1 << 11))
-    {
-        chord = 0x6;
-        step = (sample_magnitude >> 7) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-
-    if (sample_magnitude & (1 << 12))
-    {
-        chord = 0x7;
-        step = (sample_magnitude >> 8) & 0xF;
-        codeword_tmp = (sign << 7) ^ (chord << 4) ^ step;
-        debug_print("chord: %d, step: %d, codeword_tmp: %d | ", chord, step, codeword_tmp);
-        return (codeword_tmp);
-    }
-
-    if (sample_magnitude > 16383) //check if input is within upper bound
-    {
-        printf("\n!!!!! INPUT IS TOO LARGE !!!!!\n");
-    }
-
-    debug_print("COULD NOT MEET IF STATMENT CONDITION");
-    return 0; //Error
+    //Simulate the use of an Instantiated Machine-level Custom Instruction
+    return; //Error
 }
 
-int codeword_decompression(int codeWord)
+void codeword_decompression(void)
 {
-    //Return statment at the end
-
-    if(DEBUG)
-    {
-        int sign = ((codeWord << 6) & 0x2000 );
-        sign = !sign;
-
-        int sign_Most_Sig_Bit = ((sign << 13) & 0x2000);        //shift sign to correct position and mask
-        int step = (codeWord & 0x0F);   //Step
-        int chord = ((codeWord >> 4) & 0x07);  //chord
-        int step_shifted_by_chord = step << (chord+1);
-        int add_ones_on_either_side = (0x21 << chord);        // add the 1 A B C D 1 33 dec, 100001 bin, 21 hex
-        int megnatude = add_ones_on_either_side | step_shifted_by_chord;
-        int finalVal = sign_Most_Sig_Bit | megnatude;
-        int OptimisedWord = (((!((codeWord << 6) & 0x2000 )) << 13) & 0x2000) | ((0x21 << ((codeWord >> 4) & 0x07)) | ((codeWord & 0x0F) << (((codeWord >> 4) & 0x07) + 1)));
-
-        debug_print("\n<============== Checking Decompression operation ==============>");
-
-        debug_print("\n Sign before flip: %d | ", !sign);
-        decToBinary(!sign);
-
-        debug_print("\n Sign after flip: %d | ", sign);
-        decToBinary(sign);
-
-        //int sign_Most_Sig_Bit = ((sign << 13) & 0x2000);        //shift sign to correct position and mask
-
-        debug_print("\n Sign in 14th place: %d | ", sign_Most_Sig_Bit);
-        decToBinary(sign_Most_Sig_Bit);
-
-        //int step = (codeWord & 0x0F);   //Step
-
-        debug_print("\n Step: %d | ", step);
-        decToBinary(step);
-
-       // int chord = ((codeWord >> 4) & 0x07);  //chord
-        debug_print("\n Chord: %d | ", chord);
-        decToBinary(chord);
-
-        //int step_shifted_by_chord = step << (chord+1);
-        debug_print("\n step_shifted_by_chord: %d | ", step_shifted_by_chord);
-        decToBinary(step_shifted_by_chord);
-
-        //int add_ones_on_either_side = (0x21 << chord);        // add the 1 A B C D 1 33 dec, 100001 bin, 21 hex
-        debug_print("\n add_ones_on_either_side: %d | ", add_ones_on_either_side);
-        decToBinary(add_ones_on_either_side);
-
-        //int megnatude = add_ones_on_either_side | step_shifted_by_chord;
-        debug_print("\n megnatude: %d | ", megnatude);
-        decToBinary(megnatude);
-
-        //int finalVal = sign_Most_Sig_Bit | megnatude;
-        debug_print("\n Decompressed Word: %d | ", finalVal);
-        decToBinary(finalVal);
-
-        //(((!((codeWord << 6) & 0x2000 )) << 13) & 0x2000) | ((0x21 << ((codeWord >> 4) & 0x07)) | ((codeWord & 0x0F) << (((codeWord >> 4) & 0x07) + 1)));
-        debug_print("\n Decompressed Word Optimised Result: %d | ", OptimisedWord);
-        decToBinary(OptimisedWord);
-    }
-
-    return ((((!((codeWord << 6) & 0x2000 )) << 13) & 0x2000) | ((0x21 << ((codeWord >> 4) & 0x07)) | ((codeWord & 0x0F) << (((codeWord >> 4) & 0x07) + 1))));
+    return;
 } 
 
 
@@ -190,16 +45,8 @@ int Test(int sample)
 {
     printf("\nTurn debugging to 1 in mulawAPI.h for debugging mode\n\n");
 
-    int Compressed_Word = codeword_compression(magnitude(sample), signum(sample));
-    int Decompressed_Word = codeword_decompression(Compressed_Word);
-
-    printf("\n<Testing..");
-    printf("\nInput: %d | ", sample);
-    decToBinary(sample);
-    printf("\nCompressed: %d | ", Compressed_Word);
-    decToBinary(Compressed_Word);
-    printf("\nDecompressed: %d | ", Decompressed_Word);
-    decToBinary(Decompressed_Word);
+    codeword_compression(void);
+    codeword_decompression(void);
 
     return 0;
 }
