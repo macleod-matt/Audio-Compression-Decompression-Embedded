@@ -2,8 +2,8 @@
 
 #define magnitude(sample) ((sample & 0x2000) ? sample & 0x1FFF : sample)
 
-void main()
+int main()
 {
-    magnitude(-3020);
-    return;
+    printf("%d",magnitude(-3020));
+    return 0;
 }
