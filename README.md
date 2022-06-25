@@ -1,11 +1,11 @@
-##1.0 Introduction##
+## 1.0 Introduction
 
 North American telecommunications commonly use 𝜇 Law quantization for voice traffic audio compression and decompression [1].  By compressing the voice traffic, communication network devices can support greater volumes of traffic over a communication network.  𝜇 Law utilizes a logarithmic function to compress data.  𝜇 Law compression works by sacrificing the dynamic range of an input signal to allow the signal to be compressed.  The compression is performed on a logarithmic curve leading to greater distortion to larger signals or louder sounds than smaller signals or quieter sounds.  This method is effective because the human auditory system has a logarithmic transfer function and cannot distinguish distortions to louder noises as well as it can distinguish distortions to quiet noises.  𝜇 Law audio compression is designed to compress an input value of 14 bits to a compressed codeword of 8 bits.  The compression factor of 𝜇 Law is 1.75 [2]. 
 
 This project displays the software and hardware optimized implementation of 𝜇 Law audio compression and decompression for embedded systems.  Optimizations have been specifically made for the S3C2440A 32-Bit CMOS Microcontroller [3].  The project features 4 software solutions and one hardware solution for 𝜇 Law compression. 
 
 
-###2.0 Theoretical background### 
+### 2.0 Theoretical background
 
 The audio compression is implemented using a logarithmic curve while the decompression is implemented using an exponential curve.  The logarithmic and exponential curves are shown in Figure 1 and Figure 2 respectively.  Figure 3 shows the input value compared to the decompressed output.  The figures are derived from the Optimized 𝜇 Law with If Statements Reverse Software Solution. 
 
@@ -46,11 +46,11 @@ The slope of each chord is half the previous chord.  The table for the Chord slo
 
 ![image](https://user-images.githubusercontent.com/61804317/175790933-65d8d17e-c53c-49bd-839c-0154cdf6957d.png)
 
-##3.0 Design Process##
+## 3.0 Design Process
 
-###3.1 Software Solution###
+### 3.1 Software Solution
 
-###3.1.1 Software Architecture###
+### 3.1.1 Software Architecture
 
 ![image](https://user-images.githubusercontent.com/61804317/175790946-74aec1d0-1e43-43f9-bb6b-eb7b17d906f1.png)
 
@@ -59,7 +59,7 @@ The above figure shows a high-level description of the architecture used to proc
 
 Another potential software architecture that was investigated was a finite state machine FSM. This solution would switch between the following states: (Process Sate, Compress State, Write State, Decompress State). This architecture, although would have been feasible, was ultimately considered to be unnecessarily complicated for this project due to the memory management complexity associated with formatting the wave file data as structs/nodes for a linked list so that the data position in the WAV file and formatting parameters could be handled as they are encoded for compression/decompression and then written into the new file during the state transitions. 
 
-##3.1.2 WAV file processing##
+## 3.1.2 WAV file processing
 
 ![image](https://user-images.githubusercontent.com/61804317/175790968-9da4ab4a-ddc1-4712-8a4c-bf6f1317fb73.png)
 
@@ -81,18 +81,18 @@ The remaining bytes to be processed are the data (as shown in Figure 6 above). T
 
 Finally, the encoded data is written to the output file and the files are closed. 
 
-###3.1.3 𝜇 Law Audio Compression Algorithm###
+### 3.1.3 𝜇 Law Audio Compression Algorithm
 
 The 𝜇 Law Compression Algorithm works by taking an input signal of 13 bits with the first bit being a sign bit.  The input is entered into a series of if statements used to identify the chord of the audio input.  These if statements are shown as diamonds in Figure 10.  Figure 10 shows the Original (unoptimized) code for implementing 𝜇 Law.   If the input matches a chord, the four most significant bits will be kept as the step.  The remaining bits will be truncated and lost allowing for data compression.  The output of the algorithm will be a 7-bit value with the most significant bit being the sign, the following three bits will be the chord and the last least significant bits will be the step.  
 
 ![image](https://user-images.githubusercontent.com/61804317/175791372-b5a27819-d401-4bea-945d-98908abdc204.png)
 
-##3.1.3 𝜇 Law Audio Decompression Algorithm##
+### 3.1.3 𝜇 Law Audio Decompression Algorithm
 
 ![image](https://user-images.githubusercontent.com/61804317/175791383-41006d8b-325f-4273-afe0-d51e8624ca8d.png)
 
 
-###3.2 Hardware Solution###
+### 3.2 Hardware Solution
 
 The hardware solution involves programming and FPGA in VHDL code and simulating the code.  The hardware solution logic is similar to that of the software solution.  To compress an audio signal multiple statements are used to determine how many leading zeros the signal has.  Once the if statement is entered, the signal is broken up into the step, chord, and sign.  These parts are then put together to form the compressed output signal.  
 
@@ -125,13 +125,13 @@ Figure 20 shows the FPGA Utilization.  Because the design consists of only a few
 
 ![image](https://user-images.githubusercontent.com/61804317/175791463-9bc140da-9ac7-4b58-abca-3045a9dd1120.png)
 
-##4.0 Software optimizations##
+## 4.0 Software optimizations
 
-###4.1 C Level Optimizations###
+### 4.1 C Level Optimizations
 
 With the functional architecture that was chosen. There were not operator level optimizations that could have been made that would have resulted in a significant difference in runtime or compile time speed. Instead, only minor improvements were made such as operator strength reduction and loop unrolling to improve the run time of the program. Additionally, we intentionally made use of preprocessor commands for both test cases and to improve the overall performance and cleanness of the program. 
 
-###4.2 𝜇 Law Lookup Table Software Solution###
+### 4.2 𝜇 Law Lookup Table Software Solution
 
 A lookup table was created to implement 𝜇 Law.  The lookup table maps every possible input to a return value using a switch statement.  By not requiring any computation to perform 𝜇 Law compression, the software solution has a small execution time compared to other solutions. 
  
@@ -139,18 +139,18 @@ The drawback of using a lookup table is that it requires a large amount of memor
 
 ![image](https://user-images.githubusercontent.com/61804317/175791508-9b52f1ba-907d-49ea-9b7d-58c70253b5f9.png)
 
-###4.3 Optimized 𝜇 Law with If Statements Reverse Software Solution###
+### 4.3 Optimized 𝜇 Law with If Statements Reverse Software Solution
 
 To further optimize the software solution, the if statements from the Operator Strength Reduction 𝜇 Law Software Solution were ordered from the largest input value to the smallest input value.  The Optimized 𝜇 Law with If Statements Reverse Software Solution uses much of the same code as the Operator Strength Resection code, however, the ordering of the if statements is reversed. 
 
 
 After comparing the execution times of the Operator Strength Reduction 𝜇 Law Software Solution to the Optimized 𝜇 Law with If Statements Reverse Software Solution, it was determined that the If Statement Reversed solution had an execution time 17% lower than the Operator Strength Reduction Solution.  The difference in performance is likely because the audio file that the solutions were tested on mainly consisted of silence and quiet sounds.  Quiet sounds require less bits to represent in the audio file.  When the software solutions read through the audio the Operator Strength Reduction Solution begins its if statements looking for large values before moving to smaller values.  The optimized, If Statement Reversed Solution does the opposite, first looking for small values before continuing to larger values.  By looking for quiet sounds first, the if statement branches are taken sooner and the software runs faster. 
 
-###4.5 Switch Statement###
+### 4.5 Switch Statement
 
 To further optimize the code, an alternative software solution was considered.  In the alternative software solution, the if statements in the Operator Strength Reduction Solution were replaced by a switch statement.  The challenge with creating the Switch Statement solution is that a switch statement requires a fixed input value unlike if statements that support condition checks.  To accommodate this requirement the conditional check is processed before the switch statement.  The fixed integer value for the switch statement is determined by iterating through a while loop.  In each iteration a counter value named “NumberOfBits” is increased while the input value is shifted one bit to the right.  The loop exits once the input bits are shifted to zero.  The counter value is then used as an input to the switch statement. 
 
-###4.6 Assembly Level Optimizations###
+### 4.6 Assembly Level Optimizations
 
 After compiling the Optimized 𝜇 Law with If Statements Reverse Software Solution, it was evident additional optimizations could be applied to the assembly.  Looking at the assembly for the compression and decompression, one can see optimizations made towards the compression also apply for optimizations made for the decompression.  One such optimization is removing instructions that would store data and then immediately load the same data from memory.  This occurred in both the assembly for the compression and decompression.  Attempts were made at the C level to help the compiler not include these errors by having all five valuables used in the compression function kept in registers.  Despite making this adjustment to the C code, the compiler continued to insist on making unnecessary accesses to memory.  As a result, the optimizations must be applied in the assembly.  This is a significant Optimization as load and store operations are expensive and require many processor cycles to perform.  The Unoptimized and Optimized assembly may be seen in the following table.
 
@@ -185,7 +185,7 @@ would be best.
 
 
 
-##5.0 Performance##
+## 5.0 Performance
 
 To evaluate performance of the software solutions discussed in section 3 of this report
 The four software solutions, Operator Strength Reduction 𝜇 Law, Optimized 𝜇 Law with If
@@ -218,7 +218,7 @@ the Table 11 and Figure 22.
 
 Comparing the software solutions to one another, one may see that by using the fastest software solution, the If Statement Reversed, one may achieve a speed up of 31% over the original, Unoptimized solution.   While this is a significant improvement, one may also wish to consider the speed of up a hardware solution.  From the simulations discussed in, section 3.2, Hardware Solutions, results show an execution time of 90 micro-seconds.  Comparing the hardware solution’s performance to the original, Unoptimized solution, one may observe a decrease in execution time by a factor of 9355.  Comparing this value to the software solution’s decrease in execution time by a factor of 1.44, one may see that the hardware solution may provide a significant increase in performance.   While the simulated results of the hardware solution are promising, it is a greater challenge to implement and would likely be financially expensive.  Determining whether to choose the optimized software solution or the hardware solution would ultimately be dictated by whether the performance offered by the hardware solution is worth the financial cost over the less expensive software solution.
 
-###5.1 Audio Compression###
+### 5.1 Audio Compression
 
 As shown in Figure 22, the audio compression has a greater variance in execution times. This
 outcome is expected as all the software solutions feature different compression methods and the same
@@ -232,7 +232,7 @@ lookup table solution to the if Statement Revered Solution using an Intel Core i
 may be kept in cache.
 
 
-##5.2 Audio Decompression##
+## 5.2 Audio Decompression
 
 The optimized software solutions, Operator Strength Reduction, If Statement Reversed, Lookup
 Table, and Switch Statement, feature the same decompression function. After reviewing the assembly for
@@ -250,7 +250,7 @@ Operator Strength Reduction, If Statement Reversed, and Switch software solution
 contained a similar amount of branch statements. Additionally, they all used the same decompression
 method.
 
-##6.0 Results##
+## 6.0 Results
 
 When running out executable file on the lab machine, on “Matts-Voice.wav” the following compressed
 files was created:
@@ -269,7 +269,7 @@ compression, the program was able to receive the compressed file and decompress 
 decompression, the audio file was restored to its original file size. The decompressed audio file had
 significant noise compared to the original file, however, the audio is audible and coherent.
 
-##7.0 Conclusions##
+## 7.0 Conclusions
 
 This project explored several software and compile time optimizations to improve the runtime
 performance of a 𝜇 Law audio compression and decompression algorithm implemented on an embedded
@@ -299,7 +299,7 @@ compared to the overall financial benefits of the software solution.
 
 
 
-##8.0 References##
+## 8.0 References
 
 ![image](https://user-images.githubusercontent.com/61804317/175791890-229dba4d-bd95-4b59-86a6-541ce9ab85b9.png)
 
