@@ -32,8 +32,8 @@ The argument x is bound to 0 ≤ |x| ≤ 1 and the parameter μ is bound to 0 �
 
 To implement 𝜇 Law with maximum compression, one may approximate the logarithmic curve of 𝜇 Law with 8 straight-line segments.  Below shows the approximated curve. These line segments are chords.  
 
+![image](https://user-images.githubusercontent.com/61804317/175792485-f196045f-4453-4ca0-a4c2-ea109a1e909a.png)
 
-![image](https://user-images.githubusercontent.com/61804317/175790893-a773c2bb-83f4-4157-a788-df94daf62b1d.png)
 
 The slope of each chord is half the previous chord.  The table for the Chord slope and range of inputs may be seen in Table 2.
 
